@@ -1,0 +1,2 @@
+# bitsandpieces.it
+my blog
