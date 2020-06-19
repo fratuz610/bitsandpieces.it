@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.65.3" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Nginx by examples: DOS protection &middot; bits and pieces</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class="theme-base-08 ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://bitsandpieces.it/"><h1>bits and pieces</h1></a>
+      <p class="lead">
+       thoughts about people and software 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://bitsandpieces.it/">Home</a> </li>
+        <li><a href="/posts/"> Posts </a></li><li><a href="https://github.com/fratuz610/"> Github </a></li><li><a href="https://www.linkedin.com/in/stefanofratini610/"> LinkedIn </a></li>
+      </ul>
+    </nav>
+
+    <p>© 2020. MIT license</p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Nginx by examples: DOS protection</h1>
+  <time datetime=2016-03-12T00:00:00Z class="post-date">Sat, Mar 12, 2016</time>
+  <p>If your web server is directly exposed to internet traffic it&rsquo;s always a good idea to have some sort of <a href="https://en.wikipedia.org/wiki/Denial-of-service_attack">Denial of Service</a> protection enabled.</p>
+<p>Nginx alone cannot protect from more complex and Distributed DOS attacks  (that would require a CDN) but this is no reason for not having some basic protection in place, which is also very easy to setup.</p>
+<h2 id="connection-limiting">Connection Limiting</h2>
+<p>It is a sensitive precaution to avoid too many connections from a single IP and it&rsquo;s first line of defence against trivial DOS attacks (i.e. a simple script flooding our backend from 1 server with 1 IP)</p>
+<pre><code>limit_conn_zone $binary_remote_address zone=addr:10m;
+limit_conn servers 1000;
+</code></pre><p>This simple snippet enforces that there can be max 1000 connections per IP at any time.</p>
+<p>10 MB (10m) will give us enough space to store a history of 160k requests</p>
+<p>The <code>1000</code> limit can be tweaked and lowered if necessary always considering that our clients may be behind proxies and many connections could hit our server from very few IPs</p>
+<h2 id="rate-limiting">Rate Limiting</h2>
+<p>Rate limiting works very similarly to connection limiting but from the perspective of how many requests per second are accepted by a single IP address</p>
+<pre><code>limit_req_zone $binary_remote_addr zone=one:10m rate=5r/s;
+limit_req zone=one burst=10;
+limit_req_status 503;  # default value anyway
+</code></pre><p>In this example:</p>
+<ul>
+<li>5 requests/second from 1 single IP address are allowed.</li>
+<li>Between 5 and 10 requests/sec all new incoming requests are <strong>delayed</strong>.</li>
+<li>Over 10 requests/sec all new incoming requests are rejected with the status code set in <code>limit_req_status</code></li>
+</ul>
+<p>Alternatively we <a href="http://serverfault.com/a/740324">can add the <code>nodelay</code> option</a></p>
+<pre><code>limit_req zone=one burst=10 nodelay;
+</code></pre><p>so that between 5 and 10 req/sec all new incoming requests are served as fast as possible making <code>burst</code> (10 req/sec) the hard <em>and soft</em> limit after which requests get refused</p>
+<h2 id="bandwidth-limiting">Bandwidth limiting</h2>
+<p>Bandwidth limiting is particularly useful in bandwidth restricted environments like Amazon EC2 where bandwidth exhaustion causes all traffic to virtually grind to a halt (i.e. your backend goes offline)</p>
+<pre><code>limit_rate 50k;
+limit_rate_after 500k;
+</code></pre><p>With Nginx we can limit the bandwidth to 50kb/sec only after the first 500kb have been served so that the web server selectively slows down requests for big payloads while allowing other requests at full speed</p>
+<h2 id="caching">Caching</h2>
+<p>Last but not the least caching is the single most effective way to add resiliency to your app by leveraging the super optimized caching layer Nginx offers which can easily serve thousands of req/sec for small payloads</p>
+<p>If you haven&rsquo;t setup caching yet, you should.</p>
+</div>
+
+
+    </main>
+
+    
+      
+    
+  </body>
+</html>

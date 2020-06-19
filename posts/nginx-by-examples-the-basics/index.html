@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.65.3" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Nginx by examples: the basics &middot; bits and pieces</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class="theme-base-08 ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://bitsandpieces.it/"><h1>bits and pieces</h1></a>
+      <p class="lead">
+       thoughts about people and software 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://bitsandpieces.it/">Home</a> </li>
+        <li><a href="/posts/"> Posts </a></li><li><a href="https://github.com/fratuz610/"> Github </a></li><li><a href="https://www.linkedin.com/in/stefanofratini610/"> LinkedIn </a></li>
+      </ul>
+    </nav>
+
+    <p>© 2020. MIT license</p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Nginx by examples: the basics</h1>
+  <time datetime=2016-03-07T00:00:00Z class="post-date">Mon, Mar 7, 2016</time>
+  <p>Nginx is a very popular http server/rev proxy and can be used in multiple configurations. Knowing how to configure it can literally save your day!</p>
+<h1 id="getting-started">Getting Started</h1>
+<p>To start with let&rsquo;s install the latest version of Nginx from the official Nginx PPA (under Ubuntu)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo -s
+add-apt-repository ppa:nginx/stable
+apt-get update
+apt-get install nginx
+</code></pre></div><h1 id="basic-conf">Basic conf</h1>
+<p>Once it&rsquo;s installed, Nginx comes with the following configuration (that I&rsquo;ve slightly tweaked):</p>
+<pre><code># runs worker processes nginx as www-data
+user www-data;
+# sets the number of worker processes to the number of cores as automatically identified by nginx at sturtup
+worker_processes auto;
+pid /run/nginx.pid;
+
+events {
+	# the number of incoming and outgoing connections per worker
+	worker_connections 768;
+}
+
+http {
+	# nginx core optimizations to serve files efficiently
+	sendfile on;
+	tcp_nopush on;
+	tcp_nodelay on;
+      
+	# the keepalive on http/1.1 connections
+	keepalive_timeout 65;
+        
+	# internal parameter to speed up hashtable lookups
+	types_hash_max_size 2048;
+	
+	# sends the nginx version in the server header
+	# server_tokens off;
+       
+	# default mime type mapping (from extensions)
+	include /etc/nginx/mime.types;
+	
+	# mime default if the previous mapping fails
+	default_type application/octet-stream;
+
+	# SSL settings
+	ssl_protocols TLSv1 TLSv1.1 TLSv1.2; # Dropping SSLv3, ref: POODLE
+	ssl_prefer_server_ciphers on;
+    
+	# default logs
+	access_log /var/log/nginx/access.log;
+	error_log /var/log/nginx/error.log;
+	
+	# turns GZIP on but only for text/html mime types by default
+	gzip on;
+	gzip_disable &quot;msie6&quot;;
+
+	# gzip_vary on;
+	# gzip_proxied any;
+	# gzip_comp_level 6;
+	# gzip_buffers 16 8k;
+	# gzip_http_version 1.1;
+	# gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+
+	# additional configuration
+	include /etc/nginx/conf.d/*.conf;
+	
+	# Virtual Host Configs
+	include /etc/nginx/sites-enabled/*;
+}
+</code></pre><h2 id="first-look">First look</h2>
+<p>The first thing to notice is that nginx directives tend to be very expressive and a small change can make a big difference. This makes the config files very concise (as opposed to Apache&rsquo;s)</p>
+<p>Secondly the directives can be expressed in any order and they are evaluated all together. Therefore two contradicting statements are not allowed (like with Apache).</p>
+<h2 id="nginx-processes">Nginx processes</h2>
+<p>Nginx is an <strong>event based web server</strong>. For maximum performance the number of processes should always be equal to the number of cores available as each process affinity is automatically adjusted to match each core with only one Nginx process.</p>
+<p>Setting <code>worker_processes</code> to something higher than the number of cores is useless and does result in performance degradation</p>
+<h2 id="sendfile-tcp_nopush-tcp_nodelay">sendfile, tcp_nopush, tcp_nodelay</h2>
+<p>One of the reasons nginx got so popular so quickly is the ability to serve static content very fast and at scale. The original secret behind it sits with these 3 directives. If you serve a lot of static files the default values work just fine. If you serve primarily dynamic content things <a href="https://t37.net/nginx-optimization-understanding-sendfile-tcp_nodelay-and-tcp_nopush.html">can be tweaked a bit</a>.</p>
+<h2 id="gzip">Gzip</h2>
+<p>By default the Gzip configuration is limited to gzipping only <code>text/html</code> content types. Also the default compression level <code>6</code> is too high and may cause too much stress on the CPU, limiting your throughput just to save little bandwidth.</p>
+<p>If you are hosting on AWS consider bringing <code>gzip_comp_level</code> down to 1 or 2 and Always uncomment the <code>gzip_types</code> directive.
+Also remember that compressing binary files like images and videos may make very little sense (as they are already compressed)</p>
+<h2 id="virtual-hosts">Virtual hosts</h2>
+<p>The default virtual host located at <code>/etc/nginx/sites-available/default</code> looks something like:</p>
+<pre><code>server {
+	# sets this virtual host to listed on port 80 (ipv4 by default)
+	listen       80;
+	
+	# sets the server name for virtual host resolution
+	server_name  localhost;
+	
+	# custom error and access logs location
+	error_log logs/host.error.log error;
+	access_log  logs/host.access.log;
+	
+	# the default location block
+	location / {
+		# the root directory to use to serve files
+		root   /usr/share/nginx/html;
+		
+		# tries to match the incoming URI with more than one possible file/directory on disk
+		try_files $uri $uri/index.html $uri.html =404;
+		
+		# what files to serve when a directory is matched
+		index  index.html index.htm;
+	}
+
+	# deny access to .htaccess files, if any
+	location ~ /\.ht {
+	    deny  all;
+	}
+}
+</code></pre><h2 id="server-name-and-listen">Server name and listen</h2>
+<p>The <code>server_name</code> directive drives the virtual host resolution process and can be a source of headaches in case things are not configured properly.</p>
+<p>It accepts multiple values in the form or simple strings, wildcards and regexes but unless you really know what you are doing it&rsquo;s safe to stick to simple strings only</p>
+<p>Please refrain from using:</p>
+<pre><code>server {
+     ...
+     server_name _;
+     ...
+}
+</code></pre><p>as it&rsquo;s a <em>no match</em> value that should never be used. <code>_</code> will never match any server name, hence Nginx will resolve ambiguous requests using the <strong>first <code>server{}</code> block</strong> encountered which is most likely <strong>not what you wanted</strong></p>
+<p>The correct solution is to use</p>
+<pre><code>server {
+     ...
+     listen 80 default_server;
+     ...
+}
+</code></pre><h2 id="location-block-resolution">Location block resolution</h2>
+<p>This is the trickiest bit of all to understand. When a request arrives Nginx tries to respond using the most appropriate location block based on <a href="http://nginx.org/en/docs/http/ngx_http_core_module.html#location">multiple and somehow complex rules</a>.</p>
+<blockquote>
+<p>A location can either be defined by a prefix string, or by a regular expression. Regular expressions are specified with the preceding “~*” modifier (for case-insensitive matching), or the “~” modifier (for case-sensitive matching). To find location matching a given request, nginx first checks locations defined using the prefix strings (prefix locations). Among them, the location with the longest matching prefix is selected and remembered. Then regular expressions are checked, in the order of their appearance in the configuration file. The search of regular expressions terminates on the first match, and the corresponding configuration is used. If no match with a regular expression is found then the configuration of the prefix location remembered earlier is used.</p>
+</blockquote>
+<blockquote>
+<p>If the longest matching prefix location has the “^~” modifier then regular expressions are not checked.</p>
+</blockquote>
+<p>Let&rsquo;s try and simplify:</p>
+<ul>
+<li>Nginx will try and match the longest URI based on the incoming request</li>
+<li>The <code>location / {}</code> block is the shortest URI possible and acts effectively as a <em>default value</em> when other blocks don&rsquo;t match</li>
+<li>Exact matches using <code> location = /some-uri</code> are very fast to process and save a significant amount of CPU cycles. As the home page of every domain is the most crawled page there should always be a block like</li>
+</ul>
+<pre><code>location = / {
+    # some other config here
+ }
+</code></pre><p>to reduce the load on the server</p>
+<ul>
+<li>Don&rsquo;t use a regex unless it&rsquo;s strictly necessary (like with the <a href="http://bitsandpieces.it/nginx-by-examples-php-setup">PHP FCGI connector</a>. Regexes when present take precedence over simple URI matching and can add significant computational overhead depending on their complexity.</li>
+</ul>
+</div>
+
+
+    </main>
+
+    
+      
+    
+  </body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.65.3" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Nginx by examples: https &middot; bits and pieces</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class="theme-base-08 ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://bitsandpieces.it/"><h1>bits and pieces</h1></a>
+      <p class="lead">
+       thoughts about people and software 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://bitsandpieces.it/">Home</a> </li>
+        <li><a href="/posts/"> Posts </a></li><li><a href="https://github.com/fratuz610/"> Github </a></li><li><a href="https://www.linkedin.com/in/stefanofratini610/"> LinkedIn </a></li>
+      </ul>
+    </nav>
+
+    <p>© 2020. MIT license</p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Nginx by examples: https</h1>
+  <time datetime=2016-03-10T00:00:00Z class="post-date">Thu, Mar 10, 2016</time>
+  <p>Setting up SSL/TLS on Nginx is a very simple exercise.</p>
+<p>A typical setup will look like this:</p>
+<pre><code>server {
+ 
+  root /var/www/mydomain.com/web/;
+  index index.php;
+ 
+  server_name mydomain.com;
+  
+  # we enable SSL
+  listen 443 ssl;
+  ssl_certificate /home/ubuntu/ssl/mydomain.com.chained.crt;
+  ssl_certificate_key /home/ubuntu/ssl/mydomain.com.key;
+  
+  # we enable only more recent protocols
+  ssl_protocols SSLv3 TLSv1 TLSv1.1 TLSv1.2;
+  
+  # as suggested by Nginx we prioritize newer ciphers
+  ssl_ciphers  HIGH:!aNULL:!MD5;
+  
+  # we cache the ssl session parameters 
+  # to reduce the CPU load on the web server
+  ssl_session_cache   shared:SSL:10m;
+  ssl_session_timeout 10m;
+  
+  # we increase the keep alive timeout
+  # to improve socket reuse and reduce
+  # the need for SSL handshakes
+  keepalive_timeout 70;
+  
+  access_log /var/www/mydomain.com/log/mydomain.com.access;
+  error_log /var/www/mydomain.com/log/mydomain.com.error error;
+ 
+  location / {
+  
+	# no static file serving here
+	# all non /api calls will return 403
+	deny all;
+	
+  }
+  
+  location /api {
+    proxy_pass http://127.0.0.1:8080;
+  }
+  
+}
+</code></pre><h1 id="http-to-https-redirect">Http to https redirect</h1>
+<p>More commonly you would want to <strong>redirect all <code>http://</code> traffic to <code>https://</code></strong>. Luckily this can be achieved quite easily by pre pending another server block to do the redirect for all http requests:</p>
+<pre><code>server {
+  # we listen to http:// requests
+  listen 80;
+  
+  # we respond to the same domain as the https block
+  server_name mydomain.com;
+  
+  # we return a 301 to the very same URL with https://
+  # GET parameters are preserved
+  return 301 https://$server_name$request_uri;
+}
+
+server {
+ 
+  root /var/www/mydomain.com/web/;
+  index index.php;
+ 
+  server_name mydomain.com;
+  
+  # we enable SSL
+  listen 443 ssl;
+  ssl_certificate /home/ubuntu/ssl/mydomain.com.chained.crt;
+  ssl_certificate_key /home/ubuntu/ssl/mydomain.com.key;
+  
+  # the rest as before...
+}
+</code></pre><h2 id="notes">Notes</h2>
+<ul>
+<li>
+<p>It is always a good idea to have Nginx do the SSL termination instead of having it bundled with your web app (Java / Ruby etc) as it removes operational logic from your web application and makes certificate management much easier.</p>
+</li>
+<li>
+<p>In any case HTTPS termination can be expensive in terms of CPU load. To mitigate this SSL session caching is always recommended.</p>
+</li>
+<li>
+<p>Nginx requires a public certificate chain strictly in this order: <code>serverCert</code> -&gt; <code>intermediateCert</code> -&gt; &hellip; -&gt; <code>rootCert</code> as per SSL specifications. Any other order will cause Nginx to refuse to start.</p>
+</li>
+</ul>
+</div>
+
+
+    </main>
+
+    
+      
+    
+  </body>
+</html>

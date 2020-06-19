@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.65.3" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Object Oriented Hell &middot; bits and pieces</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class="theme-base-08 ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://bitsandpieces.it/"><h1>bits and pieces</h1></a>
+      <p class="lead">
+       thoughts about people and software 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://bitsandpieces.it/">Home</a> </li>
+        <li><a href="/posts/"> Posts </a></li><li><a href="https://github.com/fratuz610/"> Github </a></li><li><a href="https://www.linkedin.com/in/stefanofratini610/"> LinkedIn </a></li>
+      </ul>
+    </nav>
+
+    <p>© 2020. MIT license</p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Object Oriented Hell</h1>
+  <time datetime=2015-06-09T00:00:00Z class="post-date">Tue, Jun 9, 2015</time>
+  <p>Did object oriented programming manage to keep its promise of better code structure?</p>
+<p>I stumbled upon this <a href="http://www.quora.com/Why-do-many-software-engineers-not-like-Java">quora answer</a> a couple of days ago and I can&rsquo;t but agree more with the points made:</p>
+<p><a href="https://svbtleusercontent.com/kqmzupdwse10cg.jpg"><img src="https://svbtleusercontent.com/kqmzupdwse10cg_small.jpg" alt="Object Oriented Programming"></a></p>
+<h1 id="oo-didnt-lead-to-better-code">OO didn&rsquo;t lead to better code</h1>
+<p>It&rsquo;s just an abstraction like others (i.e. functional programming) to be honest. Not a magic wand that will make programs write themselves.</p>
+<p>Java and to a lesser extent C++ were used improperly leading to <em>increased complexity</em> instead of <a href="http://www.javaworld.com/article/2075271/core-java/encapsulation-is-not-information-hiding.html">encapsulating it</a> when really necessary</p>
+<p>Avoid at all costs <strong>inheritance</strong>. The only place I&rsquo;ve seen inheritance work properly is with <strong>UI frameworks</strong>. So unless you are rewriting <a href="http://en.wikipedia.org/wiki/Swing_%28Java%29">Swing</a> or the Flash Virtual Machine don&rsquo;t do it.</p>
+<h1 id="an-excuse-for-ignorance">An excuse for ignorance</h1>
+<p>Many Java developers end up knowing nothing about how a computer actually works. They are just trained to write classes but can&rsquo;t tell you how an <em>http call works</em>&hellip; what is a <em>host header</em>&hellip; how <em>cookies</em> work etc</p>
+<p>When asked to help with recruiting web developers the first question I ask is where <strong>cookies are stored</strong> by default in the technology most familiar with the candidate: 99% of times their first answer is wrong. Java devs score even worse than PHP ones.</p>
+<h1 id="classes-everywhere">Classes everywhere</h1>
+<p>Not sure why but I had seen simple Java webapps with over 1000 classes and 100k instances loaded at runtime. It&rsquo;s a miracle that the JVM can cope with that&hellip;</p>
+<p>The usual pattern is as follows:</p>
+<ul>
+<li>a class that receives some dependencies (through some form of <a href="http://en.wikipedia.org/wiki/Dependency_injection">DI</a>) and exposes 3 or 4 methods</li>
+<li>each of those methods pretty much just invokes one or 2 methods on the injected objects but adds very little</li>
+<li>rinse and repeat 20 times for each feature</li>
+</ul>
+<p>A well written web app (no matter what technology) should have only <strong>controllers, services and a DB abstraction layer.</strong> nothing else.</p>
+<h1 id="if-then-else-abuse">If-then-else abuse</h1>
+<p>I&rsquo;ve seen this over and over</p>
+<pre><code>if(specialCondition) {
+  handleSpecial(...)
+} else {
+  handleNormal(...)
+}
+</code></pre><p>which over time becomes</p>
+<pre><code>if(specialConditionNew) {
+  handleSpecialNew(...)
+} else if(specialCondition) {
+  handleSpecial(...) 
+} else {
+  handleNormal(...)
+}
+</code></pre><p>Don&rsquo;t use if-then-else statements to <a href="http://stackoverflow.com/a/1554691/1196103">branch based on your dataset</a>. It most likely a symptom of bad programming. Use <strong>polymorphism</strong> instead and keep your execution flow one (no branches).</p>
+<h1 id="unit-testing-everything">Unit testing everything</h1>
+<p>Testing or automated testing is a growing necessity. Unit testing just does that: tests a unit (or class). <strong>When you test hundreds of useless classes with no business logic, what do you achieve?</strong>  Nothing  but you end up having way too many tests to write and maintain for no reason.</p>
+<p>Prefer <em>functional testing</em> and use unit testing only when there is some business logic to test (i.e. input sanitization, parsing, regex manipulation)</p>
+<h1 id="small-is-better">Small is better</h1>
+<p><a href="https://michaelochurch.wordpress.com/2012/04/13/java-shop-politics/">It&rsquo;s much better to have 1 developer working on many projects that many developers on one project</a></p>
+<p>Build <strong>many small programs that talk to each other (micro services)</strong> and do one thing and one thing only</p>
+<ul>
+<li><em>Have 1 developer per sw max</em> (extreme but doable)</li>
+<li><em>Have all developers work on multiple programs throughout a year</em> so that they can build reusable libraries</li>
+</ul>
+<p>This is how small software companies operate. No surprise they usually make better software.</p>
+<p>This approach is more difficult to <code>KPI</code> as it clashes with <a href="http://www.embedded.com/electronics-blogs/break-points/4024939/The-Commoditization-of-Software-Development">sw engineer commoditization and outsourcing</a> but also with time/power tracking.</p>
+<h1 id="big-means-more-overhead">Big means more overhead</h1>
+<p>A big software:</p>
+<ul>
+<li>requires onboarding, pundits and sw architects</li>
+<li>make talent hard to identify: if you have 5 people working on a project, who&rsquo;s the drag and who&rsquo;s the lead?</li>
+<li>ultimately becomes a <em>platform</em> with a fancy name that require more and more people, more and more onboarding efforts, more and more overhead</li>
+</ul>
+</div>
+
+
+    </main>
+
+    
+      
+    
+  </body>
+</html>

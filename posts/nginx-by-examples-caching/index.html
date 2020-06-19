@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.65.3" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Nginx by examples: caching &middot; bits and pieces</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class="theme-base-08 ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://bitsandpieces.it/"><h1>bits and pieces</h1></a>
+      <p class="lead">
+       thoughts about people and software 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://bitsandpieces.it/">Home</a> </li>
+        <li><a href="/posts/"> Posts </a></li><li><a href="https://github.com/fratuz610/"> Github </a></li><li><a href="https://www.linkedin.com/in/stefanofratini610/"> LinkedIn </a></li>
+      </ul>
+    </nav>
+
+    <p>© 2020. MIT license</p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Nginx by examples: caching</h1>
+  <time datetime=2016-03-11T00:00:00Z class="post-date">Fri, Mar 11, 2016</time>
+  <p>Nginx offers out of the box <strong>very efficient caching</strong> support where</p>
+<ul>
+<li>the cache index is stored in a memory mapped files</li>
+<li>all cache files reside on the filesystem.</li>
+</ul>
+<p>As usual the setup is fairly trivial:</p>
+<pre><code>server {
+  
+	proxy_cache_path /tmp/nginx-cache levels=1:2 
+	  keys_zone=api_cache:10m max_size=10g inactive=60m;
+	...
+	
+	location /api {
+		
+		proxy_cache api_cache;
+		
+		# we allow only 1 req per URI to hit origin 
+		# in case of a cache miss
+		proxy_cache_lock on;
+		
+		# we add the X-Proxy-Cache header to our response to the client
+		add_header X-Proxy-Cache $upstream_cache_status; 
+	
+		...
+		proxy_pass http://127.0.0.1:8080;
+	
+	}
+}
+</code></pre><p>In this example</p>
+<ul>
+<li>we setup one <code>proxy_cache</code> location called <code>api_cache</code></li>
+<li>with key size: 10mb and cache size 1gb</li>
+<li>in the <code>/tmp/cache</code> folder with a 2 level directory hierarchy</li>
+<li>where cached data is purged every 60min regardless of freshness.</li>
+<li>using the same location for the memory mapped cache file and the storage area</li>
+</ul>
+<p><strong>By default Nginx will respect the cache headers are returned by the downstream server</strong> and the preferred way to manage the caching of replies is to set a <code>Cache-Control</code> header in the reply</p>
+<h2 id="force-cache">Force cache</h2>
+<p>In some cases we can&rsquo;t modify our downstream servers to serve appropriate <code>Cache-Control</code> headers</p>
+<p>In these circumstances we can force some generic caching policies as follows</p>
+<pre><code>location /api {
+	
+	proxy_cache api_cache;
+	
+	# we ask Nginx to ignore the Cache-Control header
+	proxy_ignore_headers Cache-Control;
+	
+	# we cache any 200 or 302 response for up to 10 minutes
+	proxy_cache_valid 200 302 10m;
+	
+	# any 404 response is cached for 1 minute
+	proxy_cache_valid 404      1m;
+	
+	...
+	proxy_pass http://127.0.0.1:8080;
+
+}
+</code></pre><h2 id="notes">Notes</h2>
+<ul>
+<li>
+<p>By default only <code>GET</code> and <code>HEAD</code> requests are cached but this behaviour can be tweaked</p>
+</li>
+<li>
+<p>The cache key and the cache filenames are calculated using the following formula: <code>md5($scheme$proxy_host$request_uri)</code>.</p>
+</li>
+</ul>
+<h2 id="cookies-and-cache">Cookies and cache</h2>
+<p>For obvious reasons by default Nginx <strong>will not cache requests where the <code>Set-Cookie</code> header is set</strong>.</p>
+<p>Unfortunately many server side technologies (PHP, Java etc) create a cookie based session with each request by default thus preventing Nginx from caching pretty much any request even if the <code>Cache-Control</code> header is set</p>
+<p>In these circumstances it&rsquo;s useful to setup a different cache punching header to send with not cacheable responses</p>
+<pre><code># we ignore the Set-Cookie header
+proxy_ignore_headers Set-Cookie;
+
+# we hit origin every time a X-No-Cache custom header is set
+proxy_no_cache $http_x_no_cache 
+</code></pre><h2 id="invalidating-the-cache">Invalidating the cache</h2>
+<p>The opensource version of Nginx doesn&rsquo;t come out of the box with many ways to invalidate the cache except <code>proxy_cache_bypass</code></p>
+<pre><code># Trigger a synchronous cache update 
+# when a specific `X-No-Cache` header 
+# or if a `nocache` GET parameter are set
+proxy_cache_bypass $http_x_no_cache $arg_nocache;
+</code></pre><p><strong>Unfortunately <code>proxy_cache_bypass</code> does not update the internal cache reference if a 404 response code is returned</strong></p>
+<p>We have a few options</p>
+<ul>
+<li>Use a Nginx version with the <a href="https://github.com/FRiCKLE/ngx_cache_purge"><code>ngx_cache_purge</code> module</a> bundled in</li>
+<li>Use a script to delete the file corresponding to a specific URI from the filesystem cache location</li>
+<li>Use OpenResty to delete the cache file via HTTP request (<code>os.remove (filename)</code>)</li>
+</ul>
+</div>
+
+
+    </main>
+
+    
+      
+    
+  </body>
+</html>

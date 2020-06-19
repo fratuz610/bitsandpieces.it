@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.65.3" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Nginx by examples: naxsi waf &middot; bits and pieces</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class="theme-base-08 ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://bitsandpieces.it/"><h1>bits and pieces</h1></a>
+      <p class="lead">
+       thoughts about people and software 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://bitsandpieces.it/">Home</a> </li>
+        <li><a href="/posts/"> Posts </a></li><li><a href="https://github.com/fratuz610/"> Github </a></li><li><a href="https://www.linkedin.com/in/stefanofratini610/"> LinkedIn </a></li>
+      </ul>
+    </nav>
+
+    <p>© 2020. MIT license</p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Nginx by examples: naxsi waf</h1>
+  <time datetime=2016-03-13T00:00:00Z class="post-date">Sun, Mar 13, 2016</time>
+  <p><a href="https://github.com/nbs-system/naxsi">Naxsi</a> is an open source WAF module developed by <a href="http://www.nbs-system.com/">NBS System</a> and released under GPL v3.</p>
+<p>In the past a <code>nginx-naxsi</code> standard Ubuntu package was available from the official repositories. Unfortunately this package is no longer maintained so we must now rebuild Nginx from source to use Naxsi.</p>
+<h2 id="system-setup">System setup</h2>
+<p>Let&rsquo;s start with a fresh Ubuntu 14.04.x system</p>
+<pre><code># this is needed to build nginx
+sudo apt-get install libpcre3 libpcre3-dev libssl-dev unzip make -y
+
+cd /tmp
+
+# we download Nginx
+wget http://nginx.org/download/nginx-1.8.1.tar.gz
+
+# we download the latest Naxsi source code
+wget https://github.com/nbs-system/naxsi/archive/master.zip
+
+tar xvzf nginx-1.8.1.tar.gz
+unzip master.zip
+cd nginx-1.8.1/
+</code></pre><p>Now we need to build Nginx with the Naxsi waf module we just downloaded</p>
+<pre><code># a standard configure block where we disable 
+# some normally unused nginx modules (POP3 / IMAP / SMTP etc)
+./configure --conf-path=/etc/nginx/nginx.conf --add-module=../naxsi-master/naxsi_src/ \
+ --error-log-path=/var/log/nginx/error.log --http-client-body-temp-path=/var/lib/nginx/body \
+ --http-fastcgi-temp-path=/var/lib/nginx/fastcgi --http-log-path=/var/log/nginx/access.log \
+ --http-proxy-temp-path=/var/lib/nginx/proxy --lock-path=/var/lock/nginx.lock \
+ --pid-path=/var/run/nginx.pid --with-http_ssl_module \
+ --without-mail_pop3_module --without-mail_smtp_module \
+ --without-mail_imap_module --without-http_uwsgi_module \
+ --without-http_scgi_module --with-ipv6 --prefix=/usr
+
+# we compile
+make
+
+# we install in /etc/nginx by default
+sudo make install 
+
+# we make sure the /var/lib/nginx folder exists
+sudo mkdir /var/lib/nginx
+</code></pre><p>In most cases you should get no warnings and everything should work just fine.</p>
+<p>As we are building Nginx from scratch we need to setup a init script manually:</p>
+<p>For this exercise we&rsquo;ll download an use a stock standard <a href="https://en.wikipedia.org/wiki/Init">sysv</a> startup script borrowed by the official <a href="https://launchpad.net/~nginx/+archive/ubuntu/stable">Nginx PPA</a> which I made available on my S3 account.</p>
+<pre><code># download
+sudo wget -O /etc/init.d/nginx http://fratuz610.s3.amazonaws.com/bitsandpieces.it/nginx-by-examples-naxsi-waf/nginx
+
+# fix the file permissions
+sudo chmod a+x /etc/init.d/nginx
+
+# setup on this server
+sudo update-rc.d nginx defaults
+</code></pre><h2 id="naxsi-setup">Naxsi setup</h2>
+<p>Naxsi is a <a href="https://en.wikipedia.org/wiki/Application_firewall">WAF</a>) built around a security model which is very strict (almost unusable) by default and needs to be relaxed on a case by case basis. This approach makes the configuration more resilient to future or unknown type of security breaches.</p>
+<p>Naxsi works based off a set of strict standard rules available on its <a href="https://raw.githubusercontent.com/nbs-system/naxsi/master/naxsi_config/naxsi_core.rules">Github repository</a></p>
+<pre><code>sudo wget -O /etc/nginx/naxsi_core.rules https://raw.githubusercontent.com/nbs-system/naxsi/master/naxsi_config/naxsi_core.rules
+
+</code></pre><p>These rules change slowly over time as the development of Naxsi continues. Through experience, I&rsquo;ve setup a list of common relaxation rules that I tend to reuse over and over.</p>
+<p>They are just given here as a convenient starting point</p>
+<pre><code># Allows most characters in Cookies
+# Without these rules basically no site will ever work
+# If your web app doesn't use cookies you can comment them out safely
+BasicRule wl:1000 &quot;mz:$HEADERS_VAR:Cookie&quot;;
+BasicRule wl:1001 &quot;mz:$HEADERS_VAR:Cookie&quot;;
+BasicRule wl:1005 &quot;mz:$HEADERS_VAR:Cookie&quot;;
+BasicRule wl:1007 &quot;mz:$HEADERS_VAR:Cookie&quot;;
+BasicRule wl:1010 &quot;mz:$HEADERS_VAR:Cookie&quot;;
+BasicRule wl:1011 &quot;mz:$HEADERS_VAR:Cookie&quot;;
+BasicRule wl:1013 &quot;mz:$HEADERS_VAR:Cookie&quot;;
+BasicRule wl:1015 &quot;mz:$HEADERS_VAR:Cookie&quot;;
+BasicRule wl:1100 &quot;mz:$HEADERS_VAR:Cookie&quot;;
+BasicRule wl:1101 &quot;mz:$HEADERS_VAR:Cookie&quot;;
+BasicRule wl:1314 &quot;mz:$HEADERS_VAR:Cookie&quot;;
+BasicRule wl:1315 &quot;mz:$HEADERS_VAR:Cookie&quot;;
+BasicRule wl:1306 &quot;mz:$HEADERS_VAR:Cookie&quot;;
+BasicRule wl:1310 &quot;mz:$HEADERS_VAR:Cookie&quot;;
+BasicRule wl:1311 &quot;mz:$HEADERS_VAR:Cookie&quot;;
+BasicRule wl:1401 &quot;mz:$HEADERS_VAR:Cookie&quot;;
+
+#  allows &quot; in args
+BasicRule wl:1001 &quot;mz:ARGS&quot;;
+
+#  allows ' in args
+BasicRule wl:1013 &quot;mz:ARGS&quot;;
+
+# Allows -- in a URL
+BasicRule wl:1007 &quot;mz:URL&quot;;
+
+# Allows ; in a URL - not great but used by some CMSs
+BasicRule wl:1008 &quot;mz:URL&quot;;
+
+# Allows () in a URL
+BasicRule wl:1010 &quot;mz:URL&quot;;      
+BasicRule wl:1011 &quot;mz:URL&quot;;
+
+# allows [ and ] in the URL arguments
+BasicRule wl:1310 &quot;mz:ARGS&quot;;
+BasicRule wl:1311 &quot;mz:ARGS&quot;;
+</code></pre><p>Once again I&rsquo;ve made them available online on my S3 account</p>
+<pre><code># download the modified relaxation rules
+sudo wget -O /etc/nginx/naxsi_relax.rules http://fratuz610.s3.amazonaws.com/bitsandpieces.it/nginx-by-examples-naxsi-waf/naxsi_relax.rules
+</code></pre><h2 id="nginx-base-config">Nginx base config</h2>
+<p>For the sake of testing Naxsi out let&rsquo;s setup our server as a reverse proxy in front of bitsandpieces.it</p>
+<pre><code>user www-data;
+worker_processes 1;
+pid /run/nginx.pid;
+
+events {
+  worker_connections 1024;
+  # multi_accept on;
+}
+
+http {
+  sendfile on;
+  tcp_nopush on;
+  tcp_nodelay on;
+  keepalive_timeout 65;
+  types_hash_max_size 2048;
+  server_tokens off;
+
+  include /etc/nginx/mime.types;
+  default_type application/octet-stream;
+
+  # Logging Settings
+  access_log /var/log/nginx/access.log;
+  error_log /var/log/nginx/error.log;
+
+  # Gzip Settings
+  gzip off;
+  gzip_disable &quot;msie6&quot;;
+
+  # gzip_vary on;
+  # gzip_proxied any;
+  gzip_comp_level 2;
+  # gzip_buffers 16 8k;
+  # gzip_http_version 1.1;
+  gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+
+  # we include the nginx-naxsi core rules
+  include /etc/nginx/naxsi_core.rules;
+
+  # we allow for uploads greater than 1mb (the default)
+  client_max_body_size 128m;
+
+  # vhosts
+  server {
+
+    server_name  bitsandpieces.it;
+
+    access_log /var/log/nginx/bitsandpieces.it.access;
+    error_log /var/log/nginx/bitsandpieces.it.error error;
+
+    resolver 8.8.8.8 8.8.4.4;
+
+    gzip on;
+
+    location / {  
+      proxy_set_header Host $server_name;
+      proxy_pass http://$server_name;
+
+      proxy_http_version 1.1;
+
+      ## proxy buffer (up from 8k to 32k)
+      proxy_buffer_size   32k;
+      proxy_buffers   4 32k;
+      proxy_busy_buffers_size   32k;
+
+      ## Naxsi rules
+      #LearningMode;
+      SecRulesEnabled;
+      #SecRulesDisabled;
+      DeniedUrl &quot;/RequestDenied&quot;;
+
+      ## check rules
+      CheckRule &quot;$SQL &gt;= 10&quot; BLOCK;
+      CheckRule &quot;$RFI &gt;= 8&quot; BLOCK;
+      CheckRule &quot;$TRAVERSAL &gt;= 4&quot; BLOCK;
+      CheckRule &quot;$EVADE &gt;= 4&quot; BLOCK;
+      CheckRule &quot;$XSS &gt;= 8&quot; BLOCK;
+
+      # nginx-naxsi relaxation rules
+      include /etc/nginx/naxsi_relax.rules;
+    }
+
+    location /RequestDenied {
+      internal;
+      return 403;
+    }
+  }   
+}
+</code></pre><h2 id="naxsi-setup-1">Naxsi setup</h2>
+<p>The following lines govern how Naxsi intercepts and stops potentially malicious requests</p>
+<pre><code># We disable LearningMode
+#LearningMode;
+
+# We enable the rules
+SecRulesEnabled;
+#SecRulesDisabled;
+
+# In case of a Denied request we'll redirect to this interal URL 
+# (matched by our Nginx config)
+DeniedUrl &quot;/RequestDenied&quot;;
+
+# All rules come with a weight and are considered in a block
+# Here we define the thresholds for each block
+CheckRule &quot;$SQL &gt;= 10&quot; BLOCK;
+CheckRule &quot;$RFI &gt;= 8&quot; BLOCK;
+CheckRule &quot;$TRAVERSAL &gt;= 4&quot; BLOCK;
+CheckRule &quot;$EVADE &gt;= 4&quot; BLOCK;
+CheckRule &quot;$XSS &gt;= 8&quot; BLOCK;
+
+# we include the nginx-naxsi relaxation rules discussed before
+include /etc/nginx/naxsi_relax.rules;
+</code></pre><p>As we disabled <code>LearningMode</code> (which would have just logged the blocked requests) the WAF is now fully operational</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo service nginx start
+</code></pre></div><h2 id="testing-the-waf">Testing the WAF</h2>
+<p>The best way to test our WAF configuration is to verify that normal pages work as expected:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wget --server-response --spider http://127.0.0.1/
+</code></pre></div><p>should yield HTTP code 200</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Connecting to 127.0.0.1:80... connected.
+HTTP request sent, awaiting response...
+  HTTP/1.1 <span style="color:#ae81ff">200</span> OK
+  Server: nginx
+  Date: Fri, <span style="color:#ae81ff">11</span> Mar <span style="color:#ae81ff">2016</span> 00:26:10 GMT
+  Content-Type: text/html; charset<span style="color:#f92672">=</span>utf-8
+  Transfer-Encoding: chunked
+  Connection: keep-alive
+  Vary: Accept-Encoding
+  Status: <span style="color:#ae81ff">200</span> OK
+  ...
+
+</code></pre></div><p>and try to send malicious requests (with PHP code or SQL injection for example) and see them correctly blocked</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wget --server-response --spider http://127.0.0.1/%3C?php%20echo%20%22hello%22;%20?%3E
+</code></pre></div><p>should yield HTTP code 403</p>
+<pre><code>Connecting to 127.0.0.1:80... connected.
+HTTP request sent, awaiting response...
+  HTTP/1.1 403 Forbidden
+  Server: nginx
+  Date: Fri, 11 Mar 2016 00:31:56 GMT
+  Content-Type: text/html
+  Content-Length: 162
+  Connection: keep-alive
+  ...
+
+</code></pre>
+</div>
+
+
+    </main>
+
+    
+      
+    
+  </body>
+</html>
