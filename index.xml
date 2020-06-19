@@ -6,10 +6,35 @@
     <description>Recent content on bits and pieces</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 13 Mar 2016 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 20 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bitsandpieces.it/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Attracting the best</title>
+      <link>https://bitsandpieces.it/posts/attracting-the-best/</link>
+      <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bitsandpieces.it/posts/attracting-the-best/</guid>
+      <description>&lt;p&gt;The &lt;strong&gt;war for talent&lt;/strong&gt; is here, in every field of business but especially within the software development space.&lt;/p&gt;
+&lt;p&gt;Over time I have experienced first hand how software engineering is a &lt;code&gt;truly inventive profession&lt;/code&gt; with proven benefits associated with hiring top performers.&lt;/p&gt;
+&lt;p&gt;Having interviewed hundreds of potential candidates in my career and hired tens of them, I have had the opportunity to meet all sorts of people with different backgrounds, had amazing conversations as well as stormy ones.&lt;/p&gt;
+&lt;p&gt;While the demand for software engineers is at all time highs and it&amp;rsquo;s quite hard to find great people - increasingly the problem is getting the right candidates - when you find them - &lt;strong&gt;to accept your offer&lt;/strong&gt;.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Conflict resolution without compromise</title>
+      <link>https://bitsandpieces.it/posts/conflict-resolution-without-compromise/</link>
+      <pubDate>Sun, 13 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bitsandpieces.it/posts/conflict-resolution-without-compromise/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;We can&amp;rsquo;t possibly deliver the project this way. It will fail!
+I believe it will be extremely successful instead!!&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;How many times during our professional career we stumbled upon totally different points of views? And how many times this leads to conflict, pain and frustration at work!&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Nginx by examples: naxsi waf</title>
