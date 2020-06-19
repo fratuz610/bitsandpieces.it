@@ -6,10 +6,20 @@
     <description>Recent content in Posts on bits and pieces</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 20 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 02 Mar 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bitsandpieces.it/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Agile and software delivery</title>
+      <link>https://bitsandpieces.it/posts/agile-and-software-delivery/</link>
+      <pubDate>Mon, 02 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bitsandpieces.it/posts/agile-and-software-delivery/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;Making software is hard&lt;/strong&gt; and it&amp;rsquo;s been the case ever since the IT industry came about in the 1970’s.&lt;/p&gt;
+&lt;p&gt;It comes with no surprise that people have continuously tried to come up with sets of rules and processes that would reduce the traditional risk associated with software development projects and increase speed of delivery and predictability.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Attracting the best</title>
