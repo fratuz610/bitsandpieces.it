@@ -6,10 +6,28 @@
     <description>Recent content in Posts on bits and pieces</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 02 Mar 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 09 Jul 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bitsandpieces.it/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>The magic of well run 1:1s</title>
+      <link>https://bitsandpieces.it/posts/the-magic-of-well-run-1-1s/</link>
+      <pubDate>Thu, 09 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bitsandpieces.it/posts/the-magic-of-well-run-1-1s/</guid>
+      <description>&lt;p&gt;&lt;figure class=&#34;bp-header-image&#34;&gt;
+    &lt;img src=&#34;https://bitsandpieces.it/images/1-1-meeting.jpg&#34;
+         alt=&#34;Agile and software delivery&#34; width=&#34;100%&#34;/&gt; 
+&lt;/figure&gt;
+
+&lt;div class=&#34;bp-unsplash-photo-by&#34;&gt;
+  Photo by &lt;a href=&#34;https://unsplash.com/@wocintechchat?utm_source=unsplash&amp;amp;utm_medium=referral&amp;amp;utm_content=creditCopyText&#34;&gt;Christina @ wocintechchat.com&lt;/a&gt; 
+  on &lt;a href=&#34;https://unsplash.com/?utm_source=unsplash&amp;amp;utm_medium=referral&amp;amp;utm_content=creditCopyText&#34;&gt;Unsplash&lt;/a&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;My personal experience as an IT professional has always been that 1:1s often got deprioritized, continuously rescheduled for weeks or sometimes months, and when they did happen they were mostly used as opportunities to provide unidirectional top down updates.&lt;/p&gt;
+&lt;p&gt;As I have discovered relatively late in my career, &lt;strong&gt;1:1s are instead by far the most important meetings as a manager&lt;/strong&gt;.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Agile and software delivery</title>
