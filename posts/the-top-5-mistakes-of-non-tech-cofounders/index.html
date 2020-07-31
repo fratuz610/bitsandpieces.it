@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.65.3" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>The top 5 mistakes of non tech co founders &middot; bits and pieces</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/bitsandpieces.css">
+</head>
+
+  <body class="theme-base-08 ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://bitsandpieces.it/"><h1>bits and pieces</h1></a>
+      <p class="lead">
+       thoughts about people and software 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://bitsandpieces.it/">Home</a> </li>
+        <li><a href="/posts/"> Posts </a></li><li><a href="https://github.com/fratuz610/"> Github </a></li><li><a href="https://www.linkedin.com/in/stefanofratini610/"> LinkedIn </a></li>
+      </ul>
+    </nav>
+
+    <p>© 2020. MIT license</p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>The top 5 mistakes of non tech co founders</h1>
+  <time datetime=2020-07-31T00:00:00Z class="post-date">Fri, Jul 31, 2020</time>
+  <p><figure class="bp-header-image">
+    <img src="/images/5-mistakes-non-tech.jpg"
+         alt="The top 5 mistakes of non tech co founders" width="100%"/> 
+</figure>
+
+<div class="bp-unsplash-photo-by">
+  Photo by <a href="https://unsplash.com/@mbaumi?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Mika Baumeister</a> 
+  on <a href="https://unsplash.com/?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></div></p>
+<p>Throughout my career and especially In the last few years I had the opportunity to offer advice to tens of technology startups at different stages of maturity.</p>
+<p>After having similar conversations with multiple people on the same topics I have decided to do a write up of the top 5 mistakes every non tech cofounder makes while trying to start a technology company.</p>
+<p>If you are thinking about being a founder but are not really technical, this blog post is for you.</p>
+<p>I hope this will help you speed up your journey and avoid costly mistakes.</p>
+<h2 id="1---not-know-anything-about-technology">#1 - Not know anything about technology</h2>
+<p>With the notable exception of Apple, all successful software companies in Silicon Valley were started by people with a tech background.</p>
+<p>There are strong reasons for this: you can&rsquo;t run a tech company without basic knowledge of web and mobile technologies, APIs and integration.
+Now: I am not advocating for business co founders to get an IT degree but a basic understanding of possibilities and limitations of each technological approach is needed.</p>
+<p>The biggest issue with not having enough knowledge of tech is that you can&rsquo;t excerpt any <strong>meaningful supervision</strong> around the technical choices made and cannot understand the tradeoffs involved - even at a high level - and how they impact your business.</p>
+<p>A typical example is when your tech team decides to experiment with new and shiny technologies without fully understanding that <strong>not all tech is ready for prime time</strong>.</p>
+<p>Skilled engineers instead prefer to <a href="https://mcfunley.com/choose-boring-technology">stick to boring technology</a> - because they know exactly how it will perform in production and how it will handle scale.</p>
+<p>A few years ago there was a lot of experimentation in the database space and new technologies were launched every few months. I still remember seeing companies jumping on the bandwagon before these products had reached a meaningful level of maturity, sometimes with huge impacts in terms of stability and data loss.</p>
+<p>Another typical issue with over trusting your tech cofounder is <a href="https://stackify.com/premature-optimization-evil/">over optimization</a>: software engineers - like all technical people - have the natural tendency to look at ways to achieve better scalability, maintainability and robustness before these requirements are really needed.</p>
+<p>When there are too many unknown unknowns - like it&rsquo;s typical for early stage startups - these early optimisations are really <strong>counterproductive</strong> because they add unnecessary complexity which leads to slower development cycles.</p>
+<p>As portrayed in the movie <a href="https://en.wikipedia.org/wiki/The_Social_Network">The Social Network</a>, Facebook in the early days started with the simplest setup (1 database server and 1 web server) and the simplest tech (PHP and Mysql) possible and added complexity only after the user base out-grew the current setup, not before.</p>
+<p>The same can be said of Google and there are <a href="https://www.youtube.com/watch?v=modXC5IWTJI">some interesting talks online</a> about how the system architecture at Google naturally evolved only when it really needed to.
+Cloud providers also have the tendency to advocate for a lot of best practices which end up increasing hosting costs significantly.</p>
+<p>Closer to my personal experience are countless examples of premature optimisation like:</p>
+<ul>
+<li>building tens of microservices upfront for very simple applications.</li>
+<li>spending 6mo building CI/CD delivery pipelines that still lead to very slow deployments.</li>
+<li>introducing in memory technologies to support only a few thousand users per month.</li>
+</ul>
+<h4 id="key-takeaways">Key takeaways:</h4>
+<ol>
+<li>Skill yourself around the basics of web and cloud technology.</li>
+<li>Don&rsquo;t be afraid to question every choice your tech cofounder makes.</li>
+<li>Suggest simplicity and boring technology and optimise only when you really need it.</li>
+</ol>
+<h2 id="2---every-feature-has-a-cost">#2 - Every feature has a cost</h2>
+<p>This issue is very dear to me as I&rsquo;ve seen this in practically every single product I worked on.</p>
+<p>It&rsquo;s very common for successful software products to experience very little traction for quite a while and go through many iterations before getting to market fitness.</p>
+<p>As your company builds out their SaaS proposition it&rsquo;s very <strong>tempting to add feature after feature</strong> in order to increase the value offered to customers.</p>
+<p>This makes sense intuitively as</p>
+<ol>
+<li>people from sales, product and support provide feedback and requests changes as they use the product or try to sell it</li>
+<li>at least some of your developers are employed permanently.</li>
+</ol>
+<p>So if the development spending is ongoing and relatively fixed and you have a constant stream of internal feedback you may want to naturally make the most out of both.</p>
+<p>There is however a hidden cost associated with each feature you add: code bases have the tendency to <strong>grow complex over time</strong> as more and more features are introduced.</p>
+<p>The problem with complexity in general is that:</p>
+<ol>
+<li>it is the enemy of execution - it slows down the development of features that are really needed when you most need them the most.</li>
+<li>it increases your ongoing operational costs - as more developers and devops resources are required just to keep the machine running.</li>
+<li>it&rsquo;s usually an indicator of <a href="https://www.forbes.com/sites/martinzwilling/2014/12/16/6-ways-that-lack-of-focus-can-kill-your-business/#1d6f0bff1a21">lack of focus</a>.</li>
+</ol>
+<p>Most technical people will nowadays tell you that the solution to complex software is to create a <strong>microservice architecture</strong>. Unfortunately microservices make complexity more manageable but they don&rsquo;t take it away and their use comes at a cost compared to having a simpler architecture.</p>
+<p>The only effective solution to this problem is to understand and monitor your clients&rsquo; behaviour and needs and relentlessly work to <strong>remove</strong> the features that are not used.</p>
+<p>It may come across as a counterintuitive yet this approach is relatively common in the industry: Google - for example - is famous for <a href="https://killedbygoogle.com/">killing products</a> and features that don&rsquo;t get enough traction.</p>
+<p>In order to know what&rsquo;s being used and what isn&rsquo;t <strong>analytics tools are essential</strong>. 
+Without analytics you are flying blind as you don&rsquo;t know what your customers are doing with your product.
+Thankfully there are now literally <a href="https://mention.com/en/blog/google-analytics-alternatives/">tens of solutions available</a> that do not require any custom development and provide great insights at a very low cost.</p>
+<p>Analytical tools help uncover <strong>what</strong> your customers are doing but you can go a step further. Even more valuable is understanding <strong>why</strong> they are doing it.</p>
+<p>If you have a lot of users you can rely on <strong>regular surveys</strong> - and once again there are a lot of <a href="https://www.surveymonkey.com/">cheap/free</a> tools available in this space - whereas if you only have only a few important clients don&rsquo;t be afraid to <strong>ask them directly</strong> what they love and what they don&rsquo;t in your product - in a meeting or over the phone.</p>
+<p>Once you know what&rsquo;s important to your customers and why, all you need to do is get the courage to pick up the axe and start removing what&rsquo;s not needed - <a href="https://www.goodhousekeeping.com/home/organizing/a25846191/what-is-the-konmari-method/">in pure Marie Kondo style</a>.
+It&rsquo;s the only way to remain nimble and innovate quickly over time.</p>
+<h4 id="key-takeaways-1">Key takeaways:</h4>
+<ol>
+<li>Good software offers a handful of essential features and delivers them well.</li>
+<li>Put analytics in your code to determine what&rsquo;s really important and what&rsquo;s not</li>
+<li>be ruthless in removing what&rsquo;s not needed nor used</li>
+</ol>
+<h2 id="3---not-enough-research">#3 - Not enough research</h2>
+<p>Building software is an incredibly complex and expensive endeavour, requiring highly specialized expertise across multiple disciplines: software development, product management and user experience.</p>
+<p>It&rsquo;s tempting to think that you can get started with just a single developer and a great idea yet your chances of success in doing so are just very very low.</p>
+<p>And there is a reason for this: building software is very expensive so <strong>building the wrong product is extremely wasteful</strong>.</p>
+<p>In 2019 the <a href="https://www.cbinsights.com/research/startup-failure-reasons-top/">top 2 reasons startups failed in the US</a> were:</p>
+<ol>
+<li><em>no market need</em> and</li>
+<li><em>ran out of cash</em>.</li>
+</ol>
+<p>What makes creating a successful startup more complicated is that <a href="https://risnews.com/retail-discretionary-spending-could-plummet-much-50">worldwide discretionary spending</a> has been on a decreasing trajectory for many years now and that successful products need to be <strong>disruptive in nature</strong> - which makes them harder to build.</p>
+<p>Too many times unfortunately, startup co-founders are animated by a healthy bias to action and just want to <em>start building stuff</em> without knowing enough about their potential customers and markets.</p>
+<p>This is a big topic and there are lots of powerful tools and techniques to help planning, ideation, prototyping and testing of new ideas like <a href="https://www.gv.com/sprint/">design sprints</a>, <a href="https://leanstack.com/leancanvas">lean canvas</a>, <a href="https://www.jpattonassociates.com/user-story-mapping/">user story maps</a> etc. before carrying out any development work.</p>
+<p>The most common objections that I hear to this approach are:</p>
+<ol>
+<li><strong>I know what the customer wants</strong>. No you don&rsquo;t. Nobody does and even if you are lucky to be right, the customer needs change over time so you need a system to capture and validate that.</li>
+<li><strong>It will look bad if we ask so many questions.</strong> On the contrary time spent in the day to day with your potential customers can be a source of invaluable information and will make them feel valued and listened to - something everyone values.</li>
+<li><strong>It&rsquo;s just too late, we have already promised a pony and we just need to deliver a pony.</strong> It&rsquo;s never too late to build the wrong product because the client either will get cold feet at the 11th hour or cancel the contract as soon as it&rsquo;s financially viable if the product isn&rsquo;t needed.</li>
+</ol>
+<p>All in all building disruptive products is not an exact science and there aren&rsquo;t turnkey solutions but having done no solid research upfront is a recipe for failure.</p>
+<h4 id="key-takeaways-2">Key takeaways:</h4>
+<ol>
+<li>Be curious and think unknown unknowns</li>
+<li>Prototype and validate before you build</li>
+<li>Don&rsquo;t fall into the typical trap of making getting attached to unvalidated ideas about market needs</li>
+</ol>
+<h2 id="4---not-thinking-about-data-ownership">#4 - Not thinking about data ownership</h2>
+<p>This is a common issue with B2B products and to a lesser extent with B2C ones.</p>
+<p>Consumers on average don&rsquo;t value their personal data too much - <a href="https://hbr.org/2020/01/do-you-care-about-privacy-as-much-as-your-customers-do">although things are changing</a> - and are usually happy to give that up in exchange for free/semi free access to online products.
+After all nobody pays to use Google nor Facebook but both Google and Facebook still make huge profits by monetising our personal data and selling the capability to produce targeted ads to other businesses.</p>
+<p>If you are a company targeting the enterprise market instead things are significantly more complicated.</p>
+<p>Your solution will inevitably require to store some of your customer&rsquo;s data and it&rsquo;s very tempting to start looking at that information as <strong>something you own</strong> and can monetize in one way or another.</p>
+<p>The issue with this simplistic approach is that if that&rsquo;s true that most companies <a href="https://www.datamation.com/applications/the-surprising-truth-about-big-data.html">don&rsquo;t do much with the data they have</a>, still <a href="https://www.computerworld.com/article/3481235/new-telstra-service-facilitates-secure-b2b-data-sharing.html">they simply don&rsquo;t like the idea of sharing it</a>.</p>
+<p>Sharing data is seen as <strong>a big risk</strong> as it may give away precious information to competitors.</p>
+<p>And it doesn&rsquo;t really matter if you promise that you won&rsquo;t: the sole fact that you have potentially valuable client data within your systems is currently seen as a security risk in itself. Breaches happen all the time and businesses are becoming more and more weary of these events and their PR and monetary consequences.</p>
+<p>There are of course industry specific solutions to these problems but in my experience they are never simple nor straightforward.</p>
+<p>So always think about who will own and store your customers&rsquo; data and actively try to understand from day 1 what specific situation you will face from a market and regulatory perspective.</p>
+<h4 id="key-takeaways-3">Key takeaways:</h4>
+<ol>
+<li>Think about data ownership. There is no easy solution.</li>
+<li>Don&rsquo;t predicate your revenues on B2B data sharing as you will find endless hurdles.</li>
+</ol>
+<h2 id="5---underestimating-the-problem-of-integration">#5 - Underestimating the problem of integration</h2>
+<p>Integrations are what make different softwares <em>talk</em> with each other and the problem of integration is at least as old as computer science itself.</p>
+<p>Nowadays most companies use a <strong>best-of-breed approach</strong> where multiple independent software vendors are chosen to offer specialised vertically integrated solutions that need - at some point - some type of interface.</p>
+<p>As an example it&rsquo;s not unusual to have companies choose GSuite for email, Dropbox for file sharing, Xero for accounting and Salesforce for marketing.</p>
+<p>Chances are that you are also building a new vertically integrated solution of some sort so thinking about <strong>supporting integration</strong> with the other players is key.</p>
+<p>All modern software nowadays comes with a full set of APIs - and yours shouldn&rsquo;t be an exception. 
+If you are unfamiliar with the term, tou can think of an API as a standardized and documented <strong>language</strong> which is specific to your product and that makes integration possible without batch files and other archaic means.</p>
+<p>Having a series of vertically integrated solutions all exposing APIs is a starting point but APIs simply don&rsquo;t talk to other APIs natively.</p>
+<p>Between each set of APIs you need a <a href="https://dzone.com/articles/apis-connectors-and">connector</a>. Once again - if you are not familiar with the term - you can think of a connector as the translation layer between different APIs.</p>
+<p>The translation requires knowledge of:</p>
+<ol>
+<li>the source system&rsquo;s data model</li>
+<li>the target system&rsquo;s data model</li>
+<li>the client specific deployment configuration</li>
+</ol>
+<p>Depending on the fragmentation of the industry you are operating in - the number of connectors to develop and maintain can grow very big over time: in the hospitality industry for example there are hundreds of online travel agencies and hotel systems and any software that operates in that industry needs to handle the integration with most of these systems in one way or another .</p>
+<p>The good news is that thanks to modern cloud technologies it&rsquo;s quite easy to get started building connectors with limited development effort: you can get started literally in hours. There are even companies like <a href="https://zapier.com/">Zapier</a> that offer no-code integration-as-a-service solutions for small businesses.</p>
+<p>But don&rsquo;t be fooled: each connector comes with significant and not immediately evident maintenance costs.</p>
+<p>Brutally speaking: connectors <strong>break all the time</strong>.</p>
+<p>Your team cannot control the roadmap and configuration of the product you are integrating with and this leads to constant issues like:</p>
+<ul>
+<li>non backward-compatible changes and API deprecations</li>
+<li>unforeseen network or server failures</li>
+<li>configuration changes on either side that prevent the connector from working as expected.</li>
+</ul>
+<p>This is the crux of the problem: from the business perspective - depending on the level of customization - connectors can create significant <strong>stickiness</strong> with your clients as they effectively act as the technical glue to support business processes that are very hard to change once in place.</p>
+<p>But this stickiness is achieved in exchange for more <strong>complexity</strong> and significant ongoing maintenance costs that need to be factored into your pricing model.</p>
+<h4 id="key-takeaways-4">Key takeaways:</h4>
+<ol>
+<li>Connectors create significant customer stickiness but they are not free</li>
+<li>Each integration is a high maintenance feature - if you have too many to maintain your operational costs will explode and your delivery speed will plummet.</li>
+</ol>
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "bitsandpieces-it" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<link rel="stylesheet" href="https://emailoctopus.com/bundles/emailoctopuslist/css/formEmbed.css">
+
+<h2 style="margin-top: 20px;">Subscribe to my newsletter</h2>
+<div class="email-octopus-form-wrapper">
+  <p class="email-octopus-success-message"></p>
+  <p class="email-octopus-error-message"></p>
+
+  <form method="post"
+    action="https://emailoctopus.com/lists/05ca9bac-5dbd-11ea-a3d0-06b4694bee2a/members/embedded/1.3s/add"
+    class="email-octopus-form"
+    data-sitekey="6LdYsmsUAAAAAPXVTt-ovRsPIJ_IVhvYBBhGvRV6"
+  >
+      
+    <div class="email-octopus-form-row" style="margin-bottom: 3px;">
+        <label for="field_0">Email address</label>
+        <input id="field_0" name="field_0" type="email" placeholder="enter your email address">
+    </div>
+      
+  <div style="font-style: italic; font-size: 0.65rem; font-weight: bold; color: #666;">
+    We don't spam. Max 2 emails per calendar month. You can unsubscribe at any time.
+  </div>
+
+
+    <div class="email-octopus-form-row-hp" aria-hidden="true">
+      
+      <input type="text" name="hp05ca9bac-5dbd-11ea-a3d0-06b4694bee2a"
+        tabindex="-1"
+        autocomplete="nope">
+    </div>
+
+    <div class="email-octopus-form-row-subscribe">
+      <input type="hidden"
+        name="successRedirectUrl"
+        value="">
+      <button type="submit">Subscribe</button>
+    </div>
+  </form>
+</div>
+
+<script src="https://emailoctopus.com/bundles/emailoctopuslist/js/1.5/recaptcha.js"></script>
+<script src="https://emailoctopus.com/bundles/emailoctopuslist/js/1.5/formEmbed.js"></script>
+    </main>
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-63926454-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+    
+  </body>
+</html>

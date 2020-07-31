@@ -20,15 +20,16 @@
 
 .theme-base-08 .content a, 
 .theme-base-08 .related-posts li a:hover {
-  color: #de8586;
+  color: #cf7072;
   font-weight: 600;
+  text-decoration: underline;
 }
 
 strong {
-  color: #de6263;
+  color: #cf7072;
 }
 
 em {
   font-style: italic;
-  color: #de6263;
+  color:black;
 }
