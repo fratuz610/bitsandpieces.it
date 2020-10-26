@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.65.3" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>System Design primer &middot; bits and pieces</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link type="text/css" rel="stylesheet" href="https://bitsandpieces.it/css/bitsandpieces.css">
+</head>
+
+  <body class="theme-base-08 ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://bitsandpieces.it/"><h1>bits and pieces</h1></a>
+      <p class="lead">
+       thoughts about people and software 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://bitsandpieces.it/">Home</a> </li>
+        <li><a href="/posts/"> Posts </a></li><li><a href="https://github.com/fratuz610/"> Github </a></li><li><a href="https://www.linkedin.com/in/stefanofratini610/"> LinkedIn </a></li>
+      </ul>
+    </nav>
+
+    <p>© 2020. MIT license</p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>System Design primer</h1>
+  <time datetime=2020-10-26T00:00:00Z class="post-date">Mon, Oct 26, 2020</time>
+  <p><figure class="bp-header-image">
+    <img src="/images/system-design.jpg"
+         alt="System Design primer" width="100%"/> 
+</figure>
+
+<div class="bp-unsplash-photo-by">
+  Photo by <a href="https://unsplash.com/@sxoxm?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Sven Mieke</a> 
+  on <a href="https://unsplash.com/?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></div></p>
+<p>System design interviews are becoming more and more common among top tier software companies inside and outside Silicon Valley.</p>
+<p>Given that highly scalable systems are one of my areas of interest, in the last few months I had the opportunity to review what preparation material is available online - videos, tutorials and blog posts.</p>
+<p>Not surprisingly, a lot of free and paid material is indeed available.</p>
+<p>After watching a considerable number of <strong>lengthy youtube videos</strong> (&gt; 1.5hrs each) I started to realise how most of these guides can feel overwhelming and even give the wrong impression that solution architecture for scalable systems is an incredibly complicated field with an enormous amount of knowledge required.</p>
+<p>As I have been in this space in one way or another in the last 10+ years, I can&rsquo;t disagree more:</p>
+<blockquote>
+<p>the techniques to design efficient and modern software architectures are really only a handful and mastering them is definitely not an insurmountable task.</p>
+</blockquote>
+<p>So I have decided to put together this non-definitive guide as a curated reference to help anyone getting started.</p>
+<p>For every topic I will provide a brief explanation and focus on the <strong>tradeoffs</strong> and pitfalls that are often not covered by other material online and thus overlooked by more junior developers.</p>
+<p>I will also refrain from introducing the usual plethora of diagrams, lines and boxes that make every concept easier to understand but also - in my opinion - <em>to forget</em> and will try and offer conversational descriptions that are simple enough to follow without diagrams.</p>
+<h1 id="asking-the-right-questions">asking the right questions</h1>
+<p>Solution architecture is about providing solutions that meet business requirements.</p>
+<p>Yet the most common mistake is to jump into solution mode without having enough knowledge of the functional and non functional requirements of the system you are trying to design.</p>
+<p>Needless to say, <strong>knowledge comes from asking the right questions</strong> and at start what you should be asking goes always along the lines of the following list:</p>
+<ol>
+<li>How is the system going to work?</li>
+<li>Who are the users?</li>
+<li>How often do they use the system?</li>
+<li>Is the traffic considered constant or intermittent/spiky over time?</li>
+<li>What&rsquo;s the size of the data we need to store?</li>
+<li>What&rsquo;s the required performance?</li>
+<li>What compromises are acceptable to the user?</li>
+<li>What are the availability/SLA requirements?</li>
+<li>Do we really need high availability?</li>
+</ol>
+<p>These questions are used to determine the high level functional requirements - how the system works - as well as the typical non functional ones - scalability, performance and availability.</p>
+<p><strong>They are not optional</strong>: you will immediately fail if you don&rsquo;t ask these kind of questions as a first step.</p>
+<h1 id="system-apis">system APIs</h1>
+<p>After getting a general idea of how the system should operate the next logical step is to sketch down the <strong>system APIs</strong>.</p>
+<p>By system APIs I mean a pseudo-code simplified view of how to interact with the system you are designing. In other words, by defining inputs, methods and outputs you define the contract between the system and the rest of the world.</p>
+<p>You can think of the system APIs like a high level abstraction on which it&rsquo;s possible to derive any RESTful or GraphQL HTTP APIs or the library interface if you - like me - are old enough to remember how to define an embeddable library.</p>
+<p>For example if we were designing a file storage system we would - at a minimum - define the following APIs</p>
+<ul>
+<li>upload(file)</li>
+<li>get(file)</li>
+<li>listFiles()</li>
+<li>delete(file)</li>
+</ul>
+<p>This step is relatively simple and there are no common gotchas nor pitfalls: all you need to know is how the system works at its core.</p>
+<h1 id="the-simple-option-first">the simple option first</h1>
+<p>The best designs <strong>start very simple first</strong> and add complexity only as needed, as the discussion progresses and the requirements become less vague.</p>
+<p>The most common design mistake is to start with a complex design upfront.</p>
+<blockquote>
+<p>There are a lot of IT professionals - more or less senior - that tend to tend to design by-the-book over engineered architectures to cater for prematurely defined infinite scalability requirements.</p>
+</blockquote>
+<p>While these kinds of designs are technically correct, they are also <strong>complicated to implement and frankly not needed</strong>.</p>
+<p>This is an insidious type of premature optimisation: it&rsquo;s simply impossible to optimize a system with too many unknown unknowns towards an ideal of performance or availability that is not known yet.</p>
+<p>In the vast majority of cases, the simple option is to design a system as one single API / backend server plus one single database server - if a database is needed - and nothing else.</p>
+<h1 id="design-considerations">design considerations</h1>
+<p>Once the functional requirements are covered and a basic design is in place you will be usually asked to start iterating over your design as the interviewer provides more and more information.</p>
+<p>This is the time to start investigating the system&rsquo;s unique characteristics:</p>
+<ol>
+<li>Is it read heavy?</li>
+<li>Is it write heavy?</li>
+<li>Is it computational heavy (aggregations/stats)?</li>
+</ol>
+<p>This is where <strong>multiple options become available</strong> and there isn&rsquo;t a one size fits all solution.</p>
+<p>At this stage most online courses present and discuss various typical architectures in detail - like designing a URL shortener or redbuilding Slack or Twitter etc - which is a nice way to tackle system design if you have an infinite amount of hours to dedicate to this.</p>
+<p>In this post I would like instead to cover a few <strong>cardinal concepts</strong> that are used extensively across any highly scalable system.</p>
+<p>What follows is therefore a <strong>glossary</strong> of the most significant approaches you should be familiar with. I won&rsquo;t delve into too many details - you can find lots of details online  - but rather focus on the drawbacks and limitations of each approach because this is the area you will be tested upon.</p>
+<h1 id="1-data-caching--replication">1) data caching &amp; replication</h1>
+<p>Caching is one of the most commonly used patterns to support read heavy workloads and most developers are in one way or another familiar with this concept.</p>
+<p>The origins of this approach are to be traced back to how relational database systems were originally designed, i.e. with a strong focus on durability and writing all data to disk - which is notoriously slow - and therefore provided out of the box limited to no built in transparent in memory caching.</p>
+<p>This created the need to cache the data in memory at an application level.</p>
+<p>Given that reading from memory is still <a href="http://highscalability.com/blog/2011/1/26/google-pro-tip-use-back-of-the-envelope-calculations-to-choo.html">2 to 3 orders of magnitude faster</a> than reading from the fastests SSDs available and that the cost of memory has been steadily dropping for the last 20+ years, this approach is still very relevant nowadays.</p>
+<p>In-memory storage and computation is a key element to achieve scalability for both reads and writes: no modern system with millions of users would exist without in-memory technologies.</p>
+<p>Multiple caching strategies are available and you should definitely familiarize yourself with the most common ones: <a href="https://codeahoy.com/2017/08/11/caching-strategies-and-how-to-choose-the-right-one/">cache aside, read through, write around, write through and write behind</a>.</p>
+<h2 id="caching-drawbacks">caching drawbacks</h2>
+<p>Caching seems like a relatively simple solution but there are at least a couple of significant drawbacks to consider - and point out during the interview.</p>
+<h2 id="1-single-source-of-truth">#1 single source of truth</h2>
+<p>To start the existence of cached data violates the <a href="https://en.wikipedia.org/wiki/Single_source_of_truth">single-source-of-truth</a> principle.</p>
+<p>Having multiple versions of mutable data introduces the possibility of some of them becoming out-of-date - leading to inconsistent reads.
+In most cases this is not a huge issue but sometimes it is - depending on the specific use-cases.</p>
+<h2 id="2-cache-invalidation">#2 cache invalidation</h2>
+<p>Also given that memory is still significantly more expensive than disk space, we simply can&rsquo;t store everything in it and we need to use some sort of caching invalidation technique to make sure that what we are keeping in memory is the most relevant data.</p>
+<p>The problem is that there are <a href="https://en.wikipedia.org/wiki/Cache_replacement_policies">many such techniques</a> - all with unique PROs and CONs - and they are all <a href="https://martinfowler.com/bliki/TwoHardThings.html">notoriously difficult</a> to implement correctly from scratch.</p>
+<p>For the purpose of the interview being familiar with the LRU / LFU methods is most of the time sufficient as they are the most commonly used.</p>
+<p>Above all a great developer will highlight the perils of home-made cache invalidation and would always recommend using battle proven caching libraries and services over DIY approaches.</p>
+<h1 id="2-data-sharding">2) data sharding</h1>
+<p>If caching is as old as computer science itself, the concept of data sharding - albeit not new - became popular only 10/15 years ago as the most common way to deal with the explosion of user generated content on the Internet.</p>
+<p>Sharding a dataset means splitting it according to a specific policy across multiple servers and is usually employed in conjunction with replication in the design of distributed databases or file systems.</p>
+<p>To better understand this concept, let&rsquo;s consider the hypothetical need to store a huge list of billions of yellow pages entries. If the dataset cannot easily fit on a single server, we need to split it across multiple machines using a <strong>specific sharding key</strong>  - for example the business name - so that for example we end up storing [A-M] entries separately to the [N-Z] ones.</p>
+<p>While caching is fiddly, sharding is definitely non trivial and introduces a totally different level of complexity into your architecture.</p>
+<h2 id="sharding-drawbacks">sharding drawbacks</h2>
+<h2 id="1-operational-complexity">#1 operational complexity</h2>
+<p>Even in the over-simplified example provided above it&rsquo;s easy to see how finding an appropriate sharding key is not an easy feat. For example we could have way more businesses starting with the letters [A-M] than [N-Z] and our shards may not be balanced in terms of reads and/or writes.</p>
+<p>Also as the data changes, grows or shrinks over time and querying patterns evolve, resharding techniques to rebalance the distribution of data among the shards become necessary and there is no real automatic way to do this so human and painfully manual intervention is required.</p>
+<h2 id="2-sharding-proxies">#2 sharding proxies</h2>
+<p>While there are no sharding turnkey solutions it&rsquo;s common practice to abstract away the existence of the sharding itself from the application server by introducing a sharding-aware proxy layer between the application and the database.</p>
+<p>A typical example of this approach is the <a href="https://vitess.io/">Vitess open source project</a> - created by Youtube to make Mysql work at their scale. Vitess presents itself to the application server as a single unsharded infinitely scalable Mysql database and offers the ops team an operational platform to manage the underlying mysql instances independently from the application logic.</p>
+<p>Once again sharding proxies are no easy solution to the problem as they complicate your architecture.</p>
+<p>During a system design interview it&rsquo;s important to understand the high level concepts around sharding and being able to enumerate possible sharding techniques that can work with the system you have been asked to design while articulating logical pros and cons of each option.</p>
+<h1 id="3-load-balancing">3) load balancing</h1>
+<p>Load balancing is another common approach to support scalability and as the name suggests - is about sharing - or balancing - incoming web traffic among a cluster of application servers.</p>
+<p>Up until the early 2000s load balancing was mostly carried out using expensive hardware appliances. With the advent of the cloud, DNS based software load balancers have since become the norm.</p>
+<p>The web as we know it today would simply not exist without software load balancers so having a clear and deep understanding of how they work is a must to design highly scalable systems.</p>
+<p>Luckily their functionality is quite simple to describe: DNS based load balancers leverage domain name resolution with small timeouts to resolve a domain name to a pool of IP addresses using several techniques to distribute, redirect or manage the overall load balancing process - <a href="https://en.wikipedia.org/wiki/Load_balancing_(computing)#Round-robin_DNS">round-robin, geographical, least-connection</a> etc.</p>
+<p>DNS load balancers leverage the distributed and battle proven nature of the DNS infrastructure to provide high availability and data replication and avoid <a href="https://en.wikipedia.org/wiki/Single_point_of_failure">single points of failure</a>: once a downstream system becomes unreachable or unhealthy, its IP is removed from the pool and subsequent DNS queries will simply not return it.</p>
+<p>Obviously this approach works only if the timeouts are kept very low so the tradeoff is an increased load on the DNS infrastructure.</p>
+<h2 id="load-balancing-drawbacks">load balancing drawbacks</h2>
+<h2 id="1-autoscaling">#1 autoscaling</h2>
+<p>Autoscaling has been highly publicized by Amazon Web Services to create load balancing systems where the number of servers associated with the load balancer grows and shrinks throughout the day in accordance with the load on the application.</p>
+<p>While this approach is great on paper as it matches computation power allocated to an application to its needs, in practice it&rsquo;s actually very hard to implement it flawlessly.</p>
+<p>The main hurdle is to define correct autoscaling policies that manage to add more capacity early enough before your system becomes overwhelmed yet not too early so not to fall into over-provisioning.</p>
+<p>It is in fact non trivial to understand when an application server is near saturation as the pattern of memory, CPU and bandwidth saturation in relation to the load tend to be specific to application itself, influenced by underlying technology (PHP, Java, Golang etc) and the server sizing.</p>
+<p>More often than not, teams frustrated by the effort required have the tendency to setup autoscaling policies that rarely kick in and to keep the number of application servers over-provisioned most of the time - in effect denying the advantages of autoscaling in the first instance.</p>
+<p>While overprovisioning may seem wasteful, it&rsquo;s always important to balance the cost associated with setting up adequate autoscaling policies through trial and error.</p>
+<h2 id="2-stateless-backends">#2 stateless backends</h2>
+<p>While DNS based load balancers are quite a mature turnkey solution, their use requires the application server logic to be stateless.</p>
+<p>This means all the data your application depends on (including cookies) needs to be either replicated on all instances (like configuration items) or stored in the database. This is because sequential calls made by the same user may hit different servers depending on the load balancing strategies..</p>
+<p>While in greenfield projects statelessness is not very hard to achieve, with most legacy systems instead things are more complicated and specific workarounds - like <a href="https://www.imperva.com/learn/availability/sticky-session-persistence-and-cookies/">sticky sessions</a> for example - might become necessary.</p>
+<p>While load balancing is not a particularly complex element of a highly scalable architecture it&rsquo;s always worth understanding how they really work under the hood (see the DNS reference above) and how it&rsquo;s possible to shoot yourself in the foot by introducing auto-scaling techniques without adequate load/soak testing.</p>
+<h1 id="4-asynchronous-systems">4) asynchronous systems</h1>
+<p>This is one of the most important topics in system design.</p>
+<p>Simply put: synchronous systems accept and carry out state changes immediately, asynchronous systems accept state changes synchronously but queue up state changes for later processing.</p>
+<p>The advent of SAAS queueing options and cloud tools have made asynchronous systems more and more accessible as they make for logically simple architectures where the data flows nicely between upstream and downstream systems.</p>
+<p>However most systems should be first designed to work synchronously because of the underlying simplicity of this approach.</p>
+<p>As a rule of thumb, it makes sense to carry out tasks asynchronously only when they can take a significant and variable amount of time to complete - otherwise it&rsquo;s much easier and recommended to stick to the synchronous approach.
+In other words, simple updates to the database should be carried out synchronously.</p>
+<p>But with I/O bound tasks that move data across systems or bulk updates or data exports instead, the asynchronous approach generally provides better user experience and above all allows for sophisticated retry and error handling mechanisms.</p>
+<p>While designing asynchronous architectures it&rsquo;s important to remember that at scale failure is inevitable and architecting systems with fault tolerance in mind is key. In this context having <a href="https://en.wikipedia.org/wiki/Idempotence">idempotent</a> tasks - i.e. that can be safely retried indefinitely - is usually a baseline requirement.</p>
+<p>It&rsquo;s also important to make sure that you are familiar with modern queuing technologies like rabbitmq and <a href="https://dzone.com/articles/a-begineers-approach-to-quotkafkaquot">Apache Kafka in particular</a> and their cloud implementations (respectively Amazon SQS and Amazon Kinesis) and with the various <a href="https://eng.uber.com/reliable-reprocessing/">retry strategies</a>.</p>
+<h2 id="asynchronous-systems-drawbacks">asynchronous systems drawbacks</h2>
+<h2 id="1-operational-complexity-1">#1 operational complexity</h2>
+<p>Asynchronous systems are by definition more complex than synchronous ones as they are made of more moving parts. Each component in the data flow requires precise monitoring and failure handling strategies - like dead letter queues - that need to be tailored to the specific domain of your application.</p>
+<p>There simply isn&rsquo;t a one size fits all solution to handle this:</p>
+<ul>
+<li>How many times should a task be retried before giving up?</li>
+<li>What is the impact of data loss at every step of the way?</li>
+<li>What is the expected and acceptable latencies end to end - from queuing up to task completion?</li>
+</ul>
+<p>These are only an example of the questions that you should ask yourself and your interviewer.</p>
+<p>It&rsquo;s also worth mentioning that coding, testing and debugging asynchronous systems is significantly harder than simpler ones - just consider for a moment how hard it is to run a Kafka cluster on your development machine - so this will negatively affect the developer productivity and experience.</p>
+<h2 id="2-no-edge-cases">#2 no edge cases</h2>
+<p>Asynchronous systems move the data generally from upstream to downstream systems  across multiple hops.The greater the number of hops and moving parts, the more thinking is needed to cater for all possible scenarios.</p>
+<p>At every step anything that can go wrong will and failure will manifest itself in every possible way. It is quite tempting to label these incidents as edge cases.</p>
+<p>On the contrary a great design is able to deal with almost all failure scenarios in the most automated way possible, degrading gracefully when needed.</p>
+<p>In other words: there cannot be any edge case you haven&rsquo;t thought of so try and focus on what can go wrong while discussing the architecture with your interviewer.</p>
+<h2 id="3-user-feedback">#3 user feedback</h2>
+<p>Data validation and state change visibility are two key elements to consider when handling asynchronous requests.</p>
+<p>It&rsquo;s not unusual to encounter situations where user requests are accepted and processed asynchronously without offering the end user visibility of the state of these pending requests until they are finally processed.</p>
+<p>This has a significant impact on the user experience as most people expect to see the impact of a state change they requested reflected immediately in the user interface. Therefore it&rsquo;s necessary to cater for a visible pending state for changes that are not being completed yet.
+This is not very hard to do at design time, yet many systems are not designed to cater for these scenarios - try for example to take a volume snapshot in the AWS console - and this lack of customer focus leads to subpar UX.</p>
+<p>Validation should also happen upfront and synchronously, to avoid silent rejections that would lead to an even worse user experience.</p>
+<p>Defining what parts of your system are designed to work synchronously and what parts need queueing is by far the most important architectural decision you will be asked to make. 
+Virtually any system at scale will require some level of asynchronicity, queuing and increased complexity.</p>
+<p>Unfortunately there are no silver bullets here and it&rsquo;s crucial to be able to point out the PROs and CONs of each choice with your interviewer.</p>
+<h1 id="5-system-observability">5) system observability</h1>
+<p>This topic is not directly related to software architecture but is so crucial to modern service oriented software development that it always comes up one way or another during a system design interview.</p>
+<p>Distributed architectures are what makes systems scalable but they are also harder to monitor and observe compared to monolithic ones. To address this problem, in 2016 a few SREs working at Google published what is now famously known as the Site Reliability Engineering book.</p>
+<p>Among other already familiar topics they introduced the concept of the four golden signals of system observability which are:</p>
+<ol>
+<li><strong>Latency</strong>: on average ms</li>
+<li><strong>Traffic</strong>: the number of req/sec that are being handled by the system</li>
+<li><strong>Error rate</strong>: the number of req/sec resulting in errors</li>
+<li>and <strong>Saturation</strong>: the % of CPU/bandwidth/memory currently used by the system</li>
+</ol>
+<p>What made this list quite famous is that the key to monitor any distributed system sits with a combination of these four easy to remember signals and while this kind of knowledge was once considered out of scope for software engineers this is no longer the case with distributed scalable systems.</p>
+<h1 id="conclusion">conclusion</h1>
+<p>While this blog post is a bit long yet maybe not totally complete from every angle, there really are only a handful of topics to be able to master and nail the system design interview.</p>
+<p>If you are tasked to design and scale a system, always come back to this list of topics: solution architecture is a finite field which is definitely not impossible to master.</p>
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "bitsandpieces-it" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<link rel="stylesheet" href="https://emailoctopus.com/bundles/emailoctopuslist/css/formEmbed.css">
+
+<h2 style="margin-top: 20px;">Subscribe to my newsletter</h2>
+<div class="email-octopus-form-wrapper">
+  <p class="email-octopus-success-message"></p>
+  <p class="email-octopus-error-message"></p>
+
+  <form method="post"
+    action="https://emailoctopus.com/lists/05ca9bac-5dbd-11ea-a3d0-06b4694bee2a/members/embedded/1.3s/add"
+    class="email-octopus-form"
+    data-sitekey="6LdYsmsUAAAAAPXVTt-ovRsPIJ_IVhvYBBhGvRV6"
+  >
+      
+    <div class="email-octopus-form-row" style="margin-bottom: 3px;">
+        <label for="field_0">Email address</label>
+        <input id="field_0" name="field_0" type="email" placeholder="enter your email address">
+    </div>
+      
+  <div style="font-style: italic; font-size: 0.65rem; font-weight: bold; color: #666;">
+    We don't spam. Max 2 emails per calendar month. You can unsubscribe at any time.
+  </div>
+
+
+    <div class="email-octopus-form-row-hp" aria-hidden="true">
+      
+      <input type="text" name="hp05ca9bac-5dbd-11ea-a3d0-06b4694bee2a"
+        tabindex="-1"
+        autocomplete="nope">
+    </div>
+
+    <div class="email-octopus-form-row-subscribe">
+      <input type="hidden"
+        name="successRedirectUrl"
+        value="">
+      <button type="submit">Subscribe</button>
+    </div>
+  </form>
+</div>
+
+<script src="https://emailoctopus.com/bundles/emailoctopuslist/js/1.5/recaptcha.js"></script>
+<script src="https://emailoctopus.com/bundles/emailoctopuslist/js/1.5/formEmbed.js"></script>
+    </main>
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-63926454-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+    
+  </body>
+</html>

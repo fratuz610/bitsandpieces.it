@@ -6,10 +6,29 @@
     <description>Recent content on bits and pieces</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 31 Jul 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 26 Oct 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bitsandpieces.it/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>System Design primer</title>
+      <link>https://bitsandpieces.it/posts/system-design-primer/</link>
+      <pubDate>Mon, 26 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bitsandpieces.it/posts/system-design-primer/</guid>
+      <description>&lt;p&gt;&lt;figure class=&#34;bp-header-image&#34;&gt;
+    &lt;img src=&#34;https://bitsandpieces.it/images/system-design.jpg&#34;
+         alt=&#34;System Design primer&#34; width=&#34;100%&#34;/&gt; 
+&lt;/figure&gt;
+
+&lt;div class=&#34;bp-unsplash-photo-by&#34;&gt;
+  Photo by &lt;a href=&#34;https://unsplash.com/@sxoxm?utm_source=unsplash&amp;amp;utm_medium=referral&amp;amp;utm_content=creditCopyText&#34;&gt;Sven Mieke&lt;/a&gt; 
+  on &lt;a href=&#34;https://unsplash.com/?utm_source=unsplash&amp;amp;utm_medium=referral&amp;amp;utm_content=creditCopyText&#34;&gt;Unsplash&lt;/a&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;System design interviews are becoming more and more common among top tier software companies inside and outside Silicon Valley.&lt;/p&gt;
+&lt;p&gt;Given that highly scalable systems are one of my areas of interest, in the last few months I had the opportunity to review what preparation material is available online - videos, tutorials and blog posts.&lt;/p&gt;
+&lt;p&gt;Not surprisingly, a lot of free and paid material is indeed available.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>The top 5 mistakes of non tech co founders</title>
