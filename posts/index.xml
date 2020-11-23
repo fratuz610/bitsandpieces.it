@@ -6,10 +6,28 @@
     <description>Recent content in Posts on bits and pieces</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 26 Oct 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 23 Nov 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bitsandpieces.it/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Engineering persona</title>
+      <link>https://bitsandpieces.it/posts/engineering-persona/</link>
+      <pubDate>Mon, 23 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bitsandpieces.it/posts/engineering-persona/</guid>
+      <description>&lt;p&gt;&lt;figure class=&#34;bp-header-image&#34;&gt;
+    &lt;img src=&#34;https://bitsandpieces.it/images/eng-persona.jpg&#34;
+         alt=&#34;Engineering persona - what good looks like&#34; width=&#34;100%&#34;/&gt; 
+&lt;/figure&gt;
+
+&lt;div class=&#34;bp-unsplash-photo-by&#34;&gt;
+  Photo by &lt;a href=&#34;https://unsplash.com/@kobuagency?utm_source=unsplash&amp;amp;utm_medium=referral&amp;amp;utm_content=creditCopyText&#34;&gt;KOBU Agency&lt;/a&gt; 
+  on &lt;a href=&#34;https://unsplash.com/?utm_source=unsplash&amp;amp;utm_medium=referral&amp;amp;utm_content=creditCopyText&#34;&gt;Unsplash&lt;/a&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;I need to admit I always enjoy interviewing candidates for software engineering positions: &lt;strong&gt;there is a unique power that comes with choosing the right people&lt;/strong&gt;, bringing them into a team and observing how the best individuals can really make the difference.&lt;/p&gt;
+&lt;p&gt;While I have been relatively lucky in my hiring endeavour, it always somehow bothered me that I didn&amp;rsquo;t know &lt;strong&gt;why it worked the way it did&lt;/strong&gt;.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>System Design primer</title>
