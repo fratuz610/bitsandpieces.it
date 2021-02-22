@@ -6,10 +6,23 @@
     <description>Recent content on bits and pieces</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 23 Nov 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 18 Feb 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bitsandpieces.it/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Easy loadbalancing across ECS services using Nginx and ECS-ingress</title>
+      <link>https://bitsandpieces.it/posts/ecs-ingress-nginx/</link>
+      <pubDate>Thu, 18 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bitsandpieces.it/posts/ecs-ingress-nginx/</guid>
+      <description>&lt;p&gt;From my presentation at the &lt;a href=&#34;https://www.meetup.com/AWS-Sydney/&#34;&gt;Sydney AWS meetup&lt;/a&gt; on 10 Feb 2021&lt;/p&gt;
+&lt;figure class=&#34;bp-header-image&#34;&gt;&lt;a href=&#34;https://youtu.be/jcPG6akfMjk&#34;&gt;
+    &lt;img src=&#34;https://bitsandpieces.it/images/ecs-ingress.jpg&#34;
+         alt=&#34;ECS-ingress: easy loadbalancing across ECS services using Nginx&#34; width=&#34;100%&#34;/&gt; &lt;/a&gt;
+&lt;/figure&gt;</description>
+    </item>
     
     <item>
       <title>Engineering persona</title>
