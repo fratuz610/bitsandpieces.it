@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.65.3" />
+  <meta name="generator" content="Hugo 0.87.0" />
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -263,12 +263,12 @@ CheckRule &quot;$XSS &gt;= 8&quot; BLOCK;
 # we include the nginx-naxsi relaxation rules discussed before
 include /etc/nginx/naxsi_relax.rules;
 </code></pre><p>As we disabled <code>LearningMode</code> (which would have just logged the blocked requests) the WAF is now fully operational</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo service nginx start
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo service nginx start
 </code></pre></div><h2 id="testing-the-waf">Testing the WAF</h2>
 <p>The best way to test our WAF configuration is to verify that normal pages work as expected:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wget --server-response --spider http://127.0.0.1/
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wget --server-response --spider http://127.0.0.1/
 </code></pre></div><p>should yield HTTP code 200</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Connecting to 127.0.0.1:80... connected.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Connecting to 127.0.0.1:80... connected.
 HTTP request sent, awaiting response...
   HTTP/1.1 <span style="color:#ae81ff">200</span> OK
   Server: nginx
@@ -281,7 +281,7 @@ HTTP request sent, awaiting response...
   ...
 
 </code></pre></div><p>and try to send malicious requests (with PHP code or SQL injection for example) and see them correctly blocked</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wget --server-response --spider http://127.0.0.1/%3C?php%20echo%20%22hello%22;%20?%3E
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wget --server-response --spider http://127.0.0.1/%3C?php%20echo%20%22hello%22;%20?%3E
 </code></pre></div><p>should yield HTTP code 403</p>
 <pre><code>Connecting to 127.0.0.1:80... connected.
 HTTP request sent, awaiting response...

@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.65.3" />
+  <meta name="generator" content="Hugo 0.87.0" />
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -56,25 +56,25 @@
 <p>If the db size is small there are relatively little problems. Once the database starts growing in size the risk is stealing resources away from your app and hence impact on customer experience.</p>
 <h1 id="1-out-of-the-box">1. Out of the box</h1>
 <p>Mysqldump, out of the box can be invoked as follows</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mysqldump -h something.com -u user -pPassword &gt; /backup/backup.sql
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mysqldump -h something.com -u user -pPassword &gt; /backup/backup.sql
 </code></pre></div><h1 id="2-switching-to-repeatable-reads">2. Switching to repeatable-reads</h1>
 <p>If your underlying storage engine is <a href="https://en.wikipedia.org/wiki/InnoDB">InnoDB</a> and your table structure is not going to change during the backup we can safely add the <code>--single-transaction</code> option: this way the export will run in a <a href="https://dev.mysql.com/doc/refman/5.5/en/mysqldump.html#option_mysqldump_single-transaction">single transaction with repeatable-read isolation level</a> giving you a consistent backup</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mysqldump -h something.com -u user -pPassword --single-transaction &gt; /backup/backup.sql
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mysqldump -h something.com -u user -pPassword --single-transaction &gt; /backup/backup.sql
 </code></pre></div><p>PS the <code>--quick</code> option is enabled by default since Mysql 5.1 and there is no need explicitly specify it</p>
 <h1 id="3-slowing-mysqldump-down">3. Slowing mysqldump down</h1>
 <p>Even with the <code>--single-transaction</code> mysqldump still tries to read as much data as possible from Mysql in the shortest amount of time. If you are exporting big databases this effectively means <strong>hammering mysql as your backup is running</strong>.</p>
 <p>Luckly enough the small  <a href="http://linux.die.net/man/1/cstream">cstream tool</a> comes to our rescue: <strong>if you can&rsquo;t limit the speed of mysqldump you can limit its network speed!</strong> effectively slowing down the number or queries per second on the db</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mysqldump -h something.com -u user -pPassword --single-transaction dbName tableName | cstream -t <span style="color:#ae81ff">1000000</span>  &gt; /backup/backup.sql
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mysqldump -h something.com -u user -pPassword --single-transaction dbName tableName | cstream -t <span style="color:#ae81ff">1000000</span>  &gt; /backup/backup.sql
 </code></pre></div><p>Adding <code>cstream -t 100000</code> we limit the maximum speed of the mysql dump tool to roughly 1mb/sec. <em>This number can be tweaked (lower or higher) to achieve  gentler (and slower) backups or more aggressive and quicker ones</em></p>
 <p>Thanks to <a href="http://serverfault.com/a/313232">Brandon for suggesting this on Stackoverflow</a></p>
 <h1 id="4-saving-space">4. Saving space</h1>
 <p>If you are backing up a lot of data, chances are that you want to gzip the output of mysqldump</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mysqldump -h something.com -u user -pPassword --single-transaction dbName tableName | cstream -t <span style="color:#ae81ff">1000000</span>  | gzip &gt; /backup/backup.sql.gz
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mysqldump -h something.com -u user -pPassword --single-transaction dbName tableName | cstream -t <span style="color:#ae81ff">1000000</span>  | gzip &gt; /backup/backup.sql.gz
 </code></pre></div><p>Out of the box <code>gzip</code> uses a compression level of 6 on a 1 to 9 scale (where 1 is the lowest/fastest compression and 9 the highest/slowest one)</p>
 <p>If you play around with the compression levels long enough you will soon realize that as compression level grows <strong>he return in term of final file size is diminishing</strong> whereas the <strong>CPU usage ramps up more than linearly</strong>.</p>
 <p>In most cases a compression level between <code>1</code> - <code>4</code> works better than the default value (6) and is significantly gentler on the host running the <code>gzip</code> command.</p>
 <p>In our case we are happy with <code>1</code> (or <code>--fast</code>)</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mysqldump -h something.com -u user -pPassword --single-transaction dbName tableName | cstream -t <span style="color:#ae81ff">1000000</span>  | gzip --fast &gt; /backup/backup.sql.gz
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mysqldump -h something.com -u user -pPassword --single-transaction dbName tableName | cstream -t <span style="color:#ae81ff">1000000</span>  | gzip --fast &gt; /backup/backup.sql.gz
 </code></pre></div><h1 id="results">Results</h1>
 <p>Trying the above command against an m1.small Amazon RDS instance and a 1gb database I achieved the following results</p>
 <ul>

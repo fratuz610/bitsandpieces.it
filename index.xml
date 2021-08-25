@@ -6,10 +6,23 @@
     <description>Recent content on bits and pieces</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 18 Feb 2021 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://bitsandpieces.it/index.xml" rel="self" type="application/rss+xml" />
-    
+    <lastBuildDate>Wed, 25 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://bitsandpieces.it/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>5 traits of a successful engineering leader</title>
+      <link>https://bitsandpieces.it/posts/5-traits-successful-engineering-leader/</link>
+      <pubDate>Wed, 25 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bitsandpieces.it/posts/5-traits-successful-engineering-leader/</guid>
+      <description>&lt;p&gt;&lt;figure class=&#34;bp-header-image&#34;&gt;&lt;img src=&#34;https://bitsandpieces.it/images/5-traits-successful-engineering-leaders.jpg&#34;
+         alt=&#34;5 traits of a successful Engineering leader&#34; width=&#34;100%&#34;/&gt;
+&lt;/figure&gt;
+
+&lt;div class=&#34;bp-unsplash-photo-by&#34;&gt;
+  Photo by &lt;a href=&#34;https://unsplash.com/@robertwalsh0?utm_source=unsplash&amp;amp;utm_medium=referral&amp;amp;utm_content=creditCopyText&#34;&gt;rob walsh&lt;/a&gt; 
+  on &lt;a href=&#34;https://unsplash.com/?utm_source=unsplash&amp;amp;utm_medium=referral&amp;amp;utm_content=creditCopyText&#34;&gt;Unsplash&lt;/a&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;My experience has taught me how - in technology but also I suspect in other fields - companies tend to spend very little time defining important senior positions in terms of responsibilities, expectations and deliverables.&lt;/p&gt;
+&lt;p&gt;And yet, defining a simple but exhaustive list of the most common traits of successful leaders in technology isn&amp;rsquo;t actually that hard.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Easy loadbalancing across ECS services using Nginx and ECS-ingress</title>
@@ -18,9 +31,8 @@
       
       <guid>https://bitsandpieces.it/posts/ecs-ingress-nginx/</guid>
       <description>&lt;p&gt;From my presentation at the &lt;a href=&#34;https://www.meetup.com/AWS-Sydney/&#34;&gt;Sydney AWS meetup&lt;/a&gt; on 10 Feb 2021&lt;/p&gt;
-&lt;figure class=&#34;bp-header-image&#34;&gt;&lt;a href=&#34;https://youtu.be/jcPG6akfMjk&#34;&gt;
-    &lt;img src=&#34;https://bitsandpieces.it/images/ecs-ingress.jpg&#34;
-         alt=&#34;ECS-ingress: easy loadbalancing across ECS services using Nginx&#34; width=&#34;100%&#34;/&gt; &lt;/a&gt;
+&lt;figure class=&#34;bp-header-image&#34;&gt;&lt;a href=&#34;https://youtu.be/jcPG6akfMjk&#34;&gt;&lt;img src=&#34;https://bitsandpieces.it/images/ecs-ingress.jpg&#34;
+         alt=&#34;ECS-ingress: easy loadbalancing across ECS services using Nginx&#34; width=&#34;100%&#34;/&gt;&lt;/a&gt;
 &lt;/figure&gt;</description>
     </item>
     
@@ -30,9 +42,8 @@
       <pubDate>Mon, 23 Nov 2020 00:00:00 +0000</pubDate>
       
       <guid>https://bitsandpieces.it/posts/engineering-persona/</guid>
-      <description>&lt;p&gt;&lt;figure class=&#34;bp-header-image&#34;&gt;
-    &lt;img src=&#34;https://bitsandpieces.it/images/eng-persona.jpg&#34;
-         alt=&#34;Engineering persona - what good looks like&#34; width=&#34;100%&#34;/&gt; 
+      <description>&lt;p&gt;&lt;figure class=&#34;bp-header-image&#34;&gt;&lt;img src=&#34;https://bitsandpieces.it/images/eng-persona.jpg&#34;
+         alt=&#34;Engineering persona - what good looks like&#34; width=&#34;100%&#34;/&gt;
 &lt;/figure&gt;
 
 &lt;div class=&#34;bp-unsplash-photo-by&#34;&gt;
@@ -48,9 +59,8 @@
       <pubDate>Mon, 26 Oct 2020 00:00:00 +0000</pubDate>
       
       <guid>https://bitsandpieces.it/posts/system-design-primer/</guid>
-      <description>&lt;p&gt;&lt;figure class=&#34;bp-header-image&#34;&gt;
-    &lt;img src=&#34;https://bitsandpieces.it/images/system-design.jpg&#34;
-         alt=&#34;System Design primer&#34; width=&#34;100%&#34;/&gt; 
+      <description>&lt;p&gt;&lt;figure class=&#34;bp-header-image&#34;&gt;&lt;img src=&#34;https://bitsandpieces.it/images/system-design.jpg&#34;
+         alt=&#34;System Design primer&#34; width=&#34;100%&#34;/&gt;
 &lt;/figure&gt;
 
 &lt;div class=&#34;bp-unsplash-photo-by&#34;&gt;
@@ -67,9 +77,8 @@
       <pubDate>Fri, 31 Jul 2020 00:00:00 +0000</pubDate>
       
       <guid>https://bitsandpieces.it/posts/the-top-5-mistakes-of-non-tech-cofounders/</guid>
-      <description>&lt;p&gt;&lt;figure class=&#34;bp-header-image&#34;&gt;
-    &lt;img src=&#34;https://bitsandpieces.it/images/5-mistakes-non-tech.jpg&#34;
-         alt=&#34;The top 5 mistakes of non tech co founders&#34; width=&#34;100%&#34;/&gt; 
+      <description>&lt;p&gt;&lt;figure class=&#34;bp-header-image&#34;&gt;&lt;img src=&#34;https://bitsandpieces.it/images/5-mistakes-non-tech.jpg&#34;
+         alt=&#34;The top 5 mistakes of non tech co founders&#34; width=&#34;100%&#34;/&gt;
 &lt;/figure&gt;
 
 &lt;div class=&#34;bp-unsplash-photo-by&#34;&gt;
@@ -85,9 +94,8 @@
       <pubDate>Thu, 09 Jul 2020 00:00:00 +0000</pubDate>
       
       <guid>https://bitsandpieces.it/posts/the-magic-of-well-run-1-1s/</guid>
-      <description>&lt;p&gt;&lt;figure class=&#34;bp-header-image&#34;&gt;
-    &lt;img src=&#34;https://bitsandpieces.it/images/1-1-meeting.jpg&#34;
-         alt=&#34;Agile and software delivery&#34; width=&#34;100%&#34;/&gt; 
+      <description>&lt;p&gt;&lt;figure class=&#34;bp-header-image&#34;&gt;&lt;img src=&#34;https://bitsandpieces.it/images/1-1-meeting.jpg&#34;
+         alt=&#34;Agile and software delivery&#34; width=&#34;100%&#34;/&gt;
 &lt;/figure&gt;
 
 &lt;div class=&#34;bp-unsplash-photo-by&#34;&gt;
@@ -103,9 +111,8 @@
       <pubDate>Mon, 02 Mar 2020 00:00:00 +0000</pubDate>
       
       <guid>https://bitsandpieces.it/posts/agile-and-software-delivery/</guid>
-      <description>&lt;p&gt;&lt;figure class=&#34;bp-header-image&#34;&gt;
-    &lt;img src=&#34;https://bitsandpieces.it/images/agile.jpg&#34;
-         alt=&#34;Agile and software delivery&#34; width=&#34;100%&#34;/&gt; 
+      <description>&lt;p&gt;&lt;figure class=&#34;bp-header-image&#34;&gt;&lt;img src=&#34;https://bitsandpieces.it/images/agile.jpg&#34;
+         alt=&#34;Agile and software delivery&#34; width=&#34;100%&#34;/&gt;
 &lt;/figure&gt;
 
 &lt;div class=&#34;bp-unsplash-photo-by&#34;&gt;
@@ -121,9 +128,8 @@
       <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bitsandpieces.it/posts/attracting-the-best/</guid>
-      <description>&lt;p&gt;&lt;figure class=&#34;bp-header-image&#34;&gt;
-    &lt;img src=&#34;https://bitsandpieces.it/images/for-hire.jpg&#34;
-         alt=&#34;Attracting the best&#34; width=&#34;100%&#34;/&gt; 
+      <description>&lt;p&gt;&lt;figure class=&#34;bp-header-image&#34;&gt;&lt;img src=&#34;https://bitsandpieces.it/images/for-hire.jpg&#34;
+         alt=&#34;Attracting the best&#34; width=&#34;100%&#34;/&gt;
 &lt;/figure&gt;
 
 &lt;div class=&#34;bp-unsplash-photo-by&#34;&gt;
@@ -144,9 +150,8 @@
       <pubDate>Sun, 13 Oct 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bitsandpieces.it/posts/conflict-resolution-without-compromise/</guid>
-      <description>&lt;p&gt;&lt;figure class=&#34;bp-header-image&#34;&gt;
-    &lt;img src=&#34;https://bitsandpieces.it/images/conflict.jpg&#34;
-         alt=&#34;Conflict resolution without compromise&#34; width=&#34;100%&#34;/&gt; 
+      <description>&lt;p&gt;&lt;figure class=&#34;bp-header-image&#34;&gt;&lt;img src=&#34;https://bitsandpieces.it/images/conflict.jpg&#34;
+         alt=&#34;Conflict resolution without compromise&#34; width=&#34;100%&#34;/&gt;
 &lt;/figure&gt;
 
 &lt;div class=&#34;bp-unsplash-photo-by&#34;&gt;
@@ -166,9 +171,8 @@
       
       <guid>https://bitsandpieces.it/posts/building-world-class-engineering-teams/</guid>
       <description>&lt;p&gt;From my presentation at Code Leaders 2018 - Melbourne&lt;/p&gt;
-&lt;figure class=&#34;bp-header-image&#34;&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=YyWgW5h2wQM&#34;&gt;
-    &lt;img src=&#34;https://bitsandpieces.it/images/building-world-class-video-thumbnail.png&#34;
-         alt=&#34;Building world class engineering teams&#34; width=&#34;100%&#34;/&gt; &lt;/a&gt;
+&lt;figure class=&#34;bp-header-image&#34;&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=YyWgW5h2wQM&#34;&gt;&lt;img src=&#34;https://bitsandpieces.it/images/building-world-class-video-thumbnail.png&#34;
+         alt=&#34;Building world class engineering teams&#34; width=&#34;100%&#34;/&gt;&lt;/a&gt;
 &lt;/figure&gt;</description>
     </item>
     
